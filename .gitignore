@@ -9,6 +9,9 @@ dist/
 .env.*
 !.env.example
 
+# Cấu hình WiFi / MQTT thật của firmware (xem secrets.example.h)
+iot_thien_firmware/**/secrets.h
+
 # Log
 *.log
 npm-debug.log*
