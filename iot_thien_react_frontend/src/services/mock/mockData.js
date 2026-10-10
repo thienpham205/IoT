@@ -8,7 +8,7 @@ export const mockUser = {
   studentId: 'B23DCAT285',
   email: 'phamminhthien@ptit.edu.vn',
   role: 'USER',
-  githubLink: 'https://github.com/thienpham205',
+  githubLink: 'https://github.com/thienpham205/IoT',
   figmaLink: 'https://www.figma.com/design/FUkx7yZ5Nas3ofLx7wTZ9p/IOT_THIEN?node-id=2606-318&t=zmqpSwi2fBIHgSik-1',
   postmanLink: '/files/IOT_Thien_API.postman_collection.json',
   pdfLink: '/files/Pham_Minh_Thien_B23DCAT285_IOT_Report.pdf'

@@ -17,7 +17,7 @@ async function main() {
       'Phạm Minh Thiện',
       'B23DCAT285',
       'phamminhthien@ptit.edu.vn',
-      'https://github.com/thienpham205',
+      'https://github.com/thienpham205/IoT',
       'https://www.figma.com/design/FUkx7yZ5Nas3ofLx7wTZ9p/IOT_THIEN?node-id=2606-318&t=zmqpSwi2fBIHgSik-1',
       // 2 file tĩnh do frontend phục vụ (iot_thien_react_frontend/public/files)
       '/files/IOT_Thien_API.postman_collection.json',
