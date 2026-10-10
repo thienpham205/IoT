@@ -1,0 +1,23 @@
+import mysql from 'mysql2/promise'
+import 'dotenv/config'
+
+export const pool = mysql.createPool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT || 3306),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  timezone: 'Z',
+  dateStrings: false
+})
+
+export async function pingDb() {
+  const conn = await pool.getConnection()
+  try {
+    await conn.query('SELECT 1')
+  } finally {
+    conn.release()
+  }
+}

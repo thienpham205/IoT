@@ -1,0 +1,20 @@
+# Thư viện cài từ npm
+node_modules/
+
+# File build
+dist/
+
+# Biến môi trường chứa mật khẩu / secret (xem .env.example)
+.env
+.env.*
+!.env.example
+
+# Log
+*.log
+npm-debug.log*
+
+# Hệ điều hành / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

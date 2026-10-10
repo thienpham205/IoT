@@ -1,0 +1,18 @@
+{
+  "folders": [
+    { "name": "Backend (iot_thien_backend)", "path": "iot_thien_backend" },
+    { "name": "Frontend (iot_thien_react_frontend)", "path": "iot_thien_react_frontend" },
+    { "name": "Firmware ESP8266 (sketch_aug29a)", "path": "../sketch_aug29a" }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/public/files": true
+    }
+  }
+}
