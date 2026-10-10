@@ -19,8 +19,7 @@ const int DAYLIGHT_OFFSET_SEC = 0;
 const char* NODE_ID       = "esp8266-01";
 
 // ---------- Ma cam bien / thiet bi khop voi bang sensors/devices trong CSDL ----------
-// LIGHT_01 la thiet bi that duy nhat (LED tren chan D0). FAN_01/AC_01 chi la du lieu
-// cau hinh trong CSDL, chua co relay vat ly nen se khong nhan duoc lenh tu node nay.
+// LIGHT_01 la thiet bi that duy nhat (LED tren chan D0).
 const char* SENSOR_CODE   = "SENSOR_01";
 const char* DEVICE_CODE   = "LIGHT_01";
 

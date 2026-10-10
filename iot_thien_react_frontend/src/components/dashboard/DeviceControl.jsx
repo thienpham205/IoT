@@ -1,12 +1,6 @@
-import { Fan, Lightbulb, Snowflake, LoaderCircle } from 'lucide-react'
+import { Lightbulb, LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 import { controlDevice } from '../../services/iotService'
-
-const iconMap = {
-  FAN: Fan,
-  LIGHT: Lightbulb,
-  AC: Snowflake
-}
 
 export default function DeviceControl({ devices, onConfirmed }) {
   const [pendingId, setPendingId] = useState(null)
@@ -34,11 +28,11 @@ export default function DeviceControl({ devices, onConfirmed }) {
       {error ? <div className="inline-error">{error}</div> : null}
       <div className="device-list">
         {devices.map((device) => {
-          const Icon = iconMap[device.deviceType] || Fan
           const pending = pendingId === device.deviceId
           return (
             <div className="device-card" key={device.deviceId}>
-              <div className={`device-icon ${device.deviceType.toLowerCase()}`}><Icon size={23} /></div>
+              {/* Hệ thống hiện chỉ có thiết bị Đèn (LIGHT_01) */}
+              <div className={`device-icon ${device.deviceType.toLowerCase()}`}><Lightbulb size={23} /></div>
               <div className="device-copy">
                 <strong>{device.deviceName}</strong>
                 <span>{device.location}</span>

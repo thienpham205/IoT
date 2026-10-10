@@ -94,7 +94,6 @@ a{color:inherit}
 .device-card{display:grid;grid-template-columns:44px 1fr;gap:10px;border:1px solid var(--border);border-radius:13px;padding:13px}
 .device-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--purple-soft);color:var(--purple)}
 .device-icon.light{background:var(--amber-soft);color:var(--amber)}
-.device-icon.ac{background:var(--cyan-soft);color:var(--cyan)}
 .device-copy{display:flex;flex-direction:column;gap:3px}
 .device-copy strong{font-size:13px}
 .device-copy span{font-size:10.5px;color:var(--muted)}
