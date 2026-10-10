@@ -32,13 +32,15 @@ export default function DeviceControl({ devices, onConfirmed }) {
           return (
             <div className="device-card" key={device.deviceId}>
               {/* Hệ thống hiện chỉ có thiết bị Đèn (LIGHT_01) */}
-              <div className={`device-icon ${device.deviceType.toLowerCase()}`}><Lightbulb size={23} /></div>
+              <div className={`device-icon ${device.deviceType.toLowerCase()}`}>
+                <Lightbulb size={23} />
+              </div>
               <div className="device-copy">
                 <strong>{device.deviceName}</strong>
                 <span>{device.location}</span>
               </div>
               <div className="device-actions">
-                {['ON','OFF'].map((action) => (
+                {['ON', 'OFF'].map((action) => (
                   <button
                     key={action}
                     disabled={pending}

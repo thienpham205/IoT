@@ -1,17 +1,29 @@
 import { Droplets, Lightbulb, Thermometer } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
-import DeviceControl from '../components/dashboard/DeviceControl'
-import PageHeader from '../components/layout/PageHeader'
-import SensorChart from '../components/dashboard/SensorChart'
+import { useEffect, useState } from 'react'
 import StatCard from '../components/common/StatCard'
+import DeviceControl from '../components/dashboard/DeviceControl'
+import SensorChart from '../components/dashboard/SensorChart'
+import PageHeader from '../components/layout/PageHeader'
+import { SENSOR_CODE } from '../constants'
 import { getChart, getDevices, getLatestSensor } from '../services/iotService'
+import { formatTime } from '../utils/format'
+
+const REFRESH_MS = 2000
 
 // live: 20 lần đo gần nhất, biểu đồ trượt sang trái mỗi khi có dữ liệu mới (2 giây/lần)
 // 1h / 24h: gom trung bình theo phút / giờ trong khoảng thời gian gần nhất
 const RANGES = {
   live: { label: 'Thời gian thực', title: 'Biểu đồ thời gian thực', params: () => ({ points: 20 }) },
-  '1h': { label: '1 giờ', title: 'Biểu đồ 1 giờ gần nhất', params: () => ({ interval: '1m', from: new Date(Date.now() - 3600e3).toISOString() }) },
-  '24h': { label: '24 giờ', title: 'Biểu đồ 24 giờ gần nhất', params: () => ({ interval: '1h', from: new Date(Date.now() - 86400e3).toISOString() }) }
+  '1h': {
+    label: '1 giờ',
+    title: 'Biểu đồ 1 giờ gần nhất',
+    params: () => ({ interval: '1m', from: new Date(Date.now() - 3600e3).toISOString() })
+  },
+  '24h': {
+    label: '24 giờ',
+    title: 'Biểu đồ 24 giờ gần nhất',
+    params: () => ({ interval: '1h', from: new Date(Date.now() - 86400e3).toISOString() })
+  }
 }
 
 export default function DashboardPage() {
@@ -21,45 +33,51 @@ export default function DashboardPage() {
   const [range, setRange] = useState('live')
   const [error, setError] = useState('')
 
-  async function load() {
-    try {
-      const [latestData, chartData, deviceData] = await Promise.all([
-        getLatestSensor(),
-        getChart({ sensorCode: 'SENSOR_01', ...RANGES[range].params() }),
-        getDevices()
-      ])
-      setError('')
-      setLatest(latestData)
-      setChart(chartData)
-      setDevices(deviceData)
-    } catch (e) {
-      setError(e.message || 'Không tải được Dashboard.')
-    }
-  }
-
+  // Tải lại số liệu, biểu đồ và trạng thái thiết bị mỗi REFRESH_MS
   useEffect(() => {
+    async function load() {
+      try {
+        const [latestData, chartData, deviceData] = await Promise.all([
+          getLatestSensor(),
+          getChart({ sensorCode: SENSOR_CODE, ...RANGES[range].params() }),
+          getDevices()
+        ])
+        setError('')
+        setLatest(latestData)
+        setChart(chartData)
+        setDevices(deviceData)
+      } catch (e) {
+        setError(e.message || 'Không tải được Dashboard.')
+      }
+    }
     load()
-    const id = setInterval(load, 2000)
+    const id = setInterval(load, REFRESH_MS)
     return () => clearInterval(id)
   }, [range])
 
-  const time = useMemo(() => latest?.recordedAt ? new Date(latest.recordedAt).toLocaleString('vi-VN') : '--', [latest])
-
+  // Cập nhật ngay trạng thái thiết bị vừa điều khiển, không chờ lần tải kế tiếp
   function onConfirmed(deviceId, result) {
-    setDevices((items) => items.map((d) => d.deviceId === deviceId ? { ...d, status: result.status, mode: result.mode, lastSeen: result.confirmedAt } : d))
+    setDevices((items) =>
+      items.map((d) =>
+        d.deviceId === deviceId ? { ...d, status: result.status, mode: result.mode, lastSeen: result.confirmedAt } : d
+      )
+    )
   }
 
   return (
     <div className="page">
-      <PageHeader
-        title="Trang chủ"
-        subtitle="Theo dõi dữ liệu cảm biến theo thời gian thực và điều khiển thiết bị"
-      />
+      <PageHeader title="Trang chủ" subtitle="Theo dõi dữ liệu cảm biến theo thời gian thực và điều khiển thiết bị" />
 
       {error ? <div className="page-error">{error}</div> : null}
 
       <div className="metric-grid">
-        <StatCard icon={Thermometer} tone="purple" title="Nhiệt độ" value={latest ? `${latest.temperature}°C` : '--'} note={`Cập nhật: ${time}`} />
+        <StatCard
+          icon={Thermometer}
+          tone="purple"
+          title="Nhiệt độ"
+          value={latest ? `${latest.temperature}°C` : '--'}
+          note={`Cập nhật: ${formatTime(latest?.recordedAt)}`}
+        />
         <StatCard icon={Droplets} tone="cyan" title="Độ ẩm" value={latest ? `${latest.humidity}%` : '--'} />
         <StatCard icon={Lightbulb} tone="amber" title="Độ sáng" value={latest ? `${latest.light} lux` : '--'} />
       </div>
@@ -71,11 +89,17 @@ export default function DashboardPage() {
               <h3>{RANGES[range].title}</h3>
               <p>Nhiệt độ, độ ẩm và ánh sáng trên cùng mốc thời gian</p>
             </div>
-            <select value={range} onChange={(e)=>setRange(e.target.value)} className="compact-select">
-              {Object.entries(RANGES).map(([key, r]) => <option key={key} value={key}>{r.label}</option>)}
+            <select value={range} onChange={(e) => setRange(e.target.value)} className="compact-select">
+              {Object.entries(RANGES).map(([key, r]) => (
+                <option key={key} value={key}>
+                  {r.label}
+                </option>
+              ))}
             </select>
           </div>
-          <div className="chart-area"><SensorChart chart={chart} /></div>
+          <div className="chart-area">
+            <SensorChart chart={chart} />
+          </div>
         </section>
 
         <section className="card control-card">

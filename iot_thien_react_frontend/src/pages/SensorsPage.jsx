@@ -19,6 +19,8 @@ const TYPE_OPTIONS = [
   { value: 'time', label: 'Thời gian' }
 ]
 
+const INITIAL_FILTERS = { type: '', search: '', sort: 'recordedAt,desc' }
+
 // Đổi bộ lọc trên giao diện sang tham số API /sensor-data
 function fetchSensorPage({ type, search, ...rest }) {
   const byTime = type === 'time'
@@ -26,12 +28,12 @@ function fetchSensorPage({ type, search, ...rest }) {
     ...rest,
     search,
     type: byTime ? '' : type,
-    searchField: byTime ? 'time' : (search ? 'value' : 'all')
+    searchField: byTime ? 'time' : search ? 'value' : 'all'
   })
 }
 
 export default function SensorsPage() {
-  const { data, loading, applyFilters, setPage, setSize } = usePagedData(fetchSensorPage, { type: '', search: '', sort: 'recordedAt,desc' })
+  const { data, loading, error, applyFilters, setPage, setSize } = usePagedData(fetchSensorPage, INITIAL_FILTERS)
   const [type, setType] = useState('')
   const [search, setSearch] = useState('')
   const byTime = type === 'time'
@@ -64,6 +66,8 @@ export default function SensorsPage() {
         </FilterField>
       </FilterToolbar>
 
+      {error ? <div className="page-error">{error}</div> : null}
+
       <DataTable
         headers={['ID', 'Tên cảm biến', 'Giá trị đo', 'Thời gian']}
         rows={data.content}
@@ -74,7 +78,9 @@ export default function SensorsPage() {
           <>
             <td className="technical-id">{row.dataId}</td>
             <td>{SENSOR_NAMES[row.sensorType] ?? row.sensorName}</td>
-            <td>{row.value} {row.unit}</td>
+            <td>
+              {row.value} {row.unit}
+            </td>
             <td>{formatTime(row.recordedAt)}</td>
           </>
         )}

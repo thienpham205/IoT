@@ -2,7 +2,11 @@
 // renderRow(row) trả về các <td> của một dòng; footer thường là <TablePagination />.
 export default function DataTable({ headers, rows, loading, rowKey, renderRow, emptyText, footer }) {
   const fullWidthRow = (text) => (
-    <tr><td colSpan={headers.length} className="table-empty">{text}</td></tr>
+    <tr>
+      <td colSpan={headers.length} className="table-empty">
+        {text}
+      </td>
+    </tr>
   )
 
   let body
@@ -15,7 +19,11 @@ export default function DataTable({ headers, rows, loading, rowKey, renderRow, e
       <div className="responsive-table">
         <table>
           <thead>
-            <tr>{headers.map((h) => <th key={h}>{h}</th>)}</tr>
+            <tr>
+              {headers.map((h) => (
+                <th key={h}>{h}</th>
+              ))}
+            </tr>
           </thead>
           <tbody>{body}</tbody>
         </table>

@@ -85,9 +85,21 @@ export function getMockLatestSensor() {
 // Biểu đồ tĩnh cố định: đường ngang mềm mại, hơi lượn sóng nhẹ nhàng
 const STATIC_CHART_LIVE = {
   labels: [
-    '16:20:00', '16:25:00', '16:30:00', '16:35:00', '16:40:00',
-    '16:45:00', '16:50:00', '16:55:00', '17:00:00', '17:05:00',
-    '17:10:00', '17:15:00', '17:20:00', '17:25:00', '17:30:00'
+    '16:20:00',
+    '16:25:00',
+    '16:30:00',
+    '16:35:00',
+    '16:40:00',
+    '16:45:00',
+    '16:50:00',
+    '16:55:00',
+    '17:00:00',
+    '17:05:00',
+    '17:10:00',
+    '17:15:00',
+    '17:20:00',
+    '17:25:00',
+    '17:30:00'
   ],
   series: {
     temperature: [28.4, 28.4, 28.5, 28.5, 28.5, 28.6, 28.6, 28.5, 28.5, 28.5, 28.4, 28.4, 28.5, 28.5, 28.5],
@@ -100,8 +112,19 @@ const STATIC_CHART_LIVE = {
 
 const STATIC_CHART_1H = {
   labels: [
-    '16:30', '16:35', '16:40', '16:45', '16:50', '16:55',
-    '17:00', '17:05', '17:10', '17:15', '17:20', '17:25', '17:30'
+    '16:30',
+    '16:35',
+    '16:40',
+    '16:45',
+    '16:50',
+    '16:55',
+    '17:00',
+    '17:05',
+    '17:10',
+    '17:15',
+    '17:20',
+    '17:25',
+    '17:30'
   ],
   series: {
     temperature: [28.3, 28.4, 28.4, 28.5, 28.5, 28.6, 28.5, 28.5, 28.5, 28.4, 28.5, 28.5, 28.5],
@@ -114,8 +137,19 @@ const STATIC_CHART_1H = {
 
 const STATIC_CHART_24H = {
   labels: [
-    '18:00', '20:00', '22:00', '00:00', '02:00', '04:00',
-    '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '17:30'
+    '18:00',
+    '20:00',
+    '22:00',
+    '00:00',
+    '02:00',
+    '04:00',
+    '06:00',
+    '08:00',
+    '10:00',
+    '12:00',
+    '14:00',
+    '16:00',
+    '17:30'
   ],
   series: {
     temperature: [28.2, 28.0, 27.8, 27.5, 27.4, 27.5, 27.8, 28.2, 28.5, 28.7, 28.6, 28.5, 28.5],
@@ -168,44 +202,214 @@ export function matchTimeQuery(dateValue, search) {
 
 // Dữ liệu đo cảm biến cố định
 const mockSensorRecords = [
-  { dataId: 24, sensorName: 'Nhiệt độ', sensorType: 'temperature', value: 28.5, unit: '°C', recordedAt: '2026-10-07T17:30:15+07:00' },
-  { dataId: 23, sensorName: 'Độ ẩm', sensorType: 'humidity', value: 65, unit: '%', recordedAt: '2026-10-07T17:30:15+07:00' },
-  { dataId: 22, sensorName: 'Ánh sáng', sensorType: 'light', value: 350, unit: 'lux', recordedAt: '2026-10-07T17:30:15+07:00' },
+  {
+    dataId: 24,
+    sensorName: 'Nhiệt độ',
+    sensorType: 'temperature',
+    value: 28.5,
+    unit: '°C',
+    recordedAt: '2026-10-07T17:30:15+07:00'
+  },
+  {
+    dataId: 23,
+    sensorName: 'Độ ẩm',
+    sensorType: 'humidity',
+    value: 65,
+    unit: '%',
+    recordedAt: '2026-10-07T17:30:15+07:00'
+  },
+  {
+    dataId: 22,
+    sensorName: 'Ánh sáng',
+    sensorType: 'light',
+    value: 350,
+    unit: 'lux',
+    recordedAt: '2026-10-07T17:30:15+07:00'
+  },
 
-  { dataId: 21, sensorName: 'Nhiệt độ', sensorType: 'temperature', value: 28.4, unit: '°C', recordedAt: '2026-10-07T17:25:00+07:00' },
-  { dataId: 20, sensorName: 'Độ ẩm', sensorType: 'humidity', value: 64, unit: '%', recordedAt: '2026-10-07T17:25:00+07:00' },
-  { dataId: 19, sensorName: 'Ánh sáng', sensorType: 'light', value: 345, unit: 'lux', recordedAt: '2026-10-07T17:25:00+07:00' },
+  {
+    dataId: 21,
+    sensorName: 'Nhiệt độ',
+    sensorType: 'temperature',
+    value: 28.4,
+    unit: '°C',
+    recordedAt: '2026-10-07T17:25:00+07:00'
+  },
+  {
+    dataId: 20,
+    sensorName: 'Độ ẩm',
+    sensorType: 'humidity',
+    value: 64,
+    unit: '%',
+    recordedAt: '2026-10-07T17:25:00+07:00'
+  },
+  {
+    dataId: 19,
+    sensorName: 'Ánh sáng',
+    sensorType: 'light',
+    value: 345,
+    unit: 'lux',
+    recordedAt: '2026-10-07T17:25:00+07:00'
+  },
 
-  { dataId: 18, sensorName: 'Nhiệt độ', sensorType: 'temperature', value: 28.6, unit: '°C', recordedAt: '2026-10-07T17:20:00+07:00' },
-  { dataId: 17, sensorName: 'Độ ẩm', sensorType: 'humidity', value: 66, unit: '%', recordedAt: '2026-10-07T17:20:00+07:00' },
-  { dataId: 16, sensorName: 'Ánh sáng', sensorType: 'light', value: 360, unit: 'lux', recordedAt: '2026-10-07T17:20:00+07:00' },
+  {
+    dataId: 18,
+    sensorName: 'Nhiệt độ',
+    sensorType: 'temperature',
+    value: 28.6,
+    unit: '°C',
+    recordedAt: '2026-10-07T17:20:00+07:00'
+  },
+  {
+    dataId: 17,
+    sensorName: 'Độ ẩm',
+    sensorType: 'humidity',
+    value: 66,
+    unit: '%',
+    recordedAt: '2026-10-07T17:20:00+07:00'
+  },
+  {
+    dataId: 16,
+    sensorName: 'Ánh sáng',
+    sensorType: 'light',
+    value: 360,
+    unit: 'lux',
+    recordedAt: '2026-10-07T17:20:00+07:00'
+  },
 
-  { dataId: 15, sensorName: 'Nhiệt độ', sensorType: 'temperature', value: 28.3, unit: '°C', recordedAt: '2026-10-07T17:15:00+07:00' },
-  { dataId: 14, sensorName: 'Độ ẩm', sensorType: 'humidity', value: 65, unit: '%', recordedAt: '2026-10-07T17:15:00+07:00' },
-  { dataId: 13, sensorName: 'Ánh sáng', sensorType: 'light', value: 340, unit: 'lux', recordedAt: '2026-10-07T17:15:00+07:00' },
+  {
+    dataId: 15,
+    sensorName: 'Nhiệt độ',
+    sensorType: 'temperature',
+    value: 28.3,
+    unit: '°C',
+    recordedAt: '2026-10-07T17:15:00+07:00'
+  },
+  {
+    dataId: 14,
+    sensorName: 'Độ ẩm',
+    sensorType: 'humidity',
+    value: 65,
+    unit: '%',
+    recordedAt: '2026-10-07T17:15:00+07:00'
+  },
+  {
+    dataId: 13,
+    sensorName: 'Ánh sáng',
+    sensorType: 'light',
+    value: 340,
+    unit: 'lux',
+    recordedAt: '2026-10-07T17:15:00+07:00'
+  },
 
-  { dataId: 12, sensorName: 'Nhiệt độ', sensorType: 'temperature', value: 28.2, unit: '°C', recordedAt: '2026-10-07T17:10:00+07:00' },
-  { dataId: 11, sensorName: 'Độ ẩm', sensorType: 'humidity', value: 64, unit: '%', recordedAt: '2026-10-07T17:10:00+07:00' },
-  { dataId: 10, sensorName: 'Ánh sáng', sensorType: 'light', value: 335, unit: 'lux', recordedAt: '2026-10-07T17:10:00+07:00' },
+  {
+    dataId: 12,
+    sensorName: 'Nhiệt độ',
+    sensorType: 'temperature',
+    value: 28.2,
+    unit: '°C',
+    recordedAt: '2026-10-07T17:10:00+07:00'
+  },
+  {
+    dataId: 11,
+    sensorName: 'Độ ẩm',
+    sensorType: 'humidity',
+    value: 64,
+    unit: '%',
+    recordedAt: '2026-10-07T17:10:00+07:00'
+  },
+  {
+    dataId: 10,
+    sensorName: 'Ánh sáng',
+    sensorType: 'light',
+    value: 335,
+    unit: 'lux',
+    recordedAt: '2026-10-07T17:10:00+07:00'
+  },
 
-  { dataId: 9, sensorName: 'Nhiệt độ', sensorType: 'temperature', value: 28.0, unit: '°C', recordedAt: '2026-10-07T14:30:00+07:00' },
-  { dataId: 8, sensorName: 'Độ ẩm', sensorType: 'humidity', value: 63, unit: '%', recordedAt: '2026-10-07T14:30:00+07:00' },
-  { dataId: 7, sensorName: 'Ánh sáng', sensorType: 'light', value: 320, unit: 'lux', recordedAt: '2026-10-07T14:30:00+07:00' },
+  {
+    dataId: 9,
+    sensorName: 'Nhiệt độ',
+    sensorType: 'temperature',
+    value: 28.0,
+    unit: '°C',
+    recordedAt: '2026-10-07T14:30:00+07:00'
+  },
+  {
+    dataId: 8,
+    sensorName: 'Độ ẩm',
+    sensorType: 'humidity',
+    value: 63,
+    unit: '%',
+    recordedAt: '2026-10-07T14:30:00+07:00'
+  },
+  {
+    dataId: 7,
+    sensorName: 'Ánh sáng',
+    sensorType: 'light',
+    value: 320,
+    unit: 'lux',
+    recordedAt: '2026-10-07T14:30:00+07:00'
+  },
 
-  { dataId: 6, sensorName: 'Nhiệt độ', sensorType: 'temperature', value: 27.9, unit: '°C', recordedAt: '2026-10-07T10:30:00+07:00' },
-  { dataId: 5, sensorName: 'Độ ẩm', sensorType: 'humidity', value: 62, unit: '%', recordedAt: '2026-10-07T10:30:00+07:00' },
-  { dataId: 4, sensorName: 'Ánh sáng', sensorType: 'light', value: 310, unit: 'lux', recordedAt: '2026-10-07T10:30:00+07:00' },
+  {
+    dataId: 6,
+    sensorName: 'Nhiệt độ',
+    sensorType: 'temperature',
+    value: 27.9,
+    unit: '°C',
+    recordedAt: '2026-10-07T10:30:00+07:00'
+  },
+  {
+    dataId: 5,
+    sensorName: 'Độ ẩm',
+    sensorType: 'humidity',
+    value: 62,
+    unit: '%',
+    recordedAt: '2026-10-07T10:30:00+07:00'
+  },
+  {
+    dataId: 4,
+    sensorName: 'Ánh sáng',
+    sensorType: 'light',
+    value: 310,
+    unit: 'lux',
+    recordedAt: '2026-10-07T10:30:00+07:00'
+  },
 
-  { dataId: 3, sensorName: 'Nhiệt độ', sensorType: 'temperature', value: 27.8, unit: '°C', recordedAt: '2026-10-07T05:30:00+07:00' },
-  { dataId: 2, sensorName: 'Độ ẩm', sensorType: 'humidity', value: 61, unit: '%', recordedAt: '2026-10-07T05:30:00+07:00' },
-  { dataId: 1, sensorName: 'Ánh sáng', sensorType: 'light', value: 300, unit: 'lux', recordedAt: '2026-10-07T05:30:00+07:00' }
+  {
+    dataId: 3,
+    sensorName: 'Nhiệt độ',
+    sensorType: 'temperature',
+    value: 27.8,
+    unit: '°C',
+    recordedAt: '2026-10-07T05:30:00+07:00'
+  },
+  {
+    dataId: 2,
+    sensorName: 'Độ ẩm',
+    sensorType: 'humidity',
+    value: 61,
+    unit: '%',
+    recordedAt: '2026-10-07T05:30:00+07:00'
+  },
+  {
+    dataId: 1,
+    sensorName: 'Ánh sáng',
+    sensorType: 'light',
+    value: 300,
+    unit: 'lux',
+    recordedAt: '2026-10-07T05:30:00+07:00'
+  }
 ]
 
 export function getMockSensorHistory(params = {}) {
   const page = Number(params.page) || 0
   const size = Number(params.size) || 10
   const typeFilter = params.type || ''
-  const search = String(params.search || '').trim().toLowerCase()
+  const search = String(params.search || '')
+    .trim()
+    .toLowerCase()
 
   const filtered = mockSensorRecords.filter((r) => {
     if (typeFilter && typeFilter !== 'time' && r.sensorType !== typeFilter) return false
@@ -240,16 +444,126 @@ function paginate(list, page, size) {
 
 // Dữ liệu lịch sử thao tác cố định với nhiều khung giờ thực tế
 const mockActions = [
-  { historyId: 10, actionCode: 'ACT_10', deviceId: 1, deviceName: 'Đèn', action: 'OFF', actionTime: '2026-10-07T17:30:15+07:00', confirmedAt: '2026-10-07T17:30:16+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' },
-  { historyId: 9,  actionCode: 'ACT_09', deviceId: 1, deviceName: 'Đèn', action: 'ON',  actionTime: '2026-10-07T17:30:00+07:00', confirmedAt: '2026-10-07T17:30:01+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' },
-  { historyId: 8,  actionCode: 'ACT_08', deviceId: 1, deviceName: 'Đèn', action: 'OFF', actionTime: '2026-10-07T17:28:15+07:00', confirmedAt: '2026-10-07T17:28:16+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' },
-  { historyId: 7,  actionCode: 'ACT_07', deviceId: 1, deviceName: 'Đèn', action: 'ON',  actionTime: '2026-10-07T17:21:40+07:00', confirmedAt: '2026-10-07T17:21:41+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' },
-  { historyId: 6,  actionCode: 'ACT_06', deviceId: 1, deviceName: 'Đèn', action: 'OFF', actionTime: '2026-10-07T17:14:02+07:00', confirmedAt: '2026-10-07T17:14:03+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' },
-  { historyId: 5,  actionCode: 'ACT_05', deviceId: 1, deviceName: 'Đèn', action: 'ON',  actionTime: '2026-10-07T17:08:22+07:00', confirmedAt: '2026-10-07T17:08:23+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' },
-  { historyId: 4,  actionCode: 'ACT_04', deviceId: 1, deviceName: 'Đèn', action: 'OFF', actionTime: '2026-10-07T14:30:00+07:00', confirmedAt: '2026-10-07T14:30:01+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' },
-  { historyId: 3,  actionCode: 'ACT_03', deviceId: 1, deviceName: 'Đèn', action: 'ON',  actionTime: '2026-10-07T10:30:00+07:00', confirmedAt: '2026-10-07T10:30:01+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' },
-  { historyId: 2,  actionCode: 'ACT_02', deviceId: 1, deviceName: 'Đèn', action: 'OFF', actionTime: '2026-10-07T09:55:10+07:00', confirmedAt: '2026-10-07T09:55:11+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' },
-  { historyId: 1,  actionCode: 'ACT_01', deviceId: 1, deviceName: 'Đèn', action: 'ON',  actionTime: '2026-10-07T05:30:00+07:00', confirmedAt: '2026-10-07T05:30:01+07:00', result: 'SUCCESS', userName: 'Phạm Minh Thiện', area: 'Phòng khách' }
+  {
+    historyId: 10,
+    actionCode: 'ACT_10',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'OFF',
+    actionTime: '2026-10-07T17:30:15+07:00',
+    confirmedAt: '2026-10-07T17:30:16+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  },
+  {
+    historyId: 9,
+    actionCode: 'ACT_09',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'ON',
+    actionTime: '2026-10-07T17:30:00+07:00',
+    confirmedAt: '2026-10-07T17:30:01+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  },
+  {
+    historyId: 8,
+    actionCode: 'ACT_08',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'OFF',
+    actionTime: '2026-10-07T17:28:15+07:00',
+    confirmedAt: '2026-10-07T17:28:16+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  },
+  {
+    historyId: 7,
+    actionCode: 'ACT_07',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'ON',
+    actionTime: '2026-10-07T17:21:40+07:00',
+    confirmedAt: '2026-10-07T17:21:41+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  },
+  {
+    historyId: 6,
+    actionCode: 'ACT_06',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'OFF',
+    actionTime: '2026-10-07T17:14:02+07:00',
+    confirmedAt: '2026-10-07T17:14:03+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  },
+  {
+    historyId: 5,
+    actionCode: 'ACT_05',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'ON',
+    actionTime: '2026-10-07T17:08:22+07:00',
+    confirmedAt: '2026-10-07T17:08:23+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  },
+  {
+    historyId: 4,
+    actionCode: 'ACT_04',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'OFF',
+    actionTime: '2026-10-07T14:30:00+07:00',
+    confirmedAt: '2026-10-07T14:30:01+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  },
+  {
+    historyId: 3,
+    actionCode: 'ACT_03',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'ON',
+    actionTime: '2026-10-07T10:30:00+07:00',
+    confirmedAt: '2026-10-07T10:30:01+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  },
+  {
+    historyId: 2,
+    actionCode: 'ACT_02',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'OFF',
+    actionTime: '2026-10-07T09:55:10+07:00',
+    confirmedAt: '2026-10-07T09:55:11+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  },
+  {
+    historyId: 1,
+    actionCode: 'ACT_01',
+    deviceId: 1,
+    deviceName: 'Đèn',
+    action: 'ON',
+    actionTime: '2026-10-07T05:30:00+07:00',
+    confirmedAt: '2026-10-07T05:30:01+07:00',
+    result: 'SUCCESS',
+    userName: 'Phạm Minh Thiện',
+    area: 'Phòng khách'
+  }
 ]
 
 export function getMockActionHistory(params = {}) {
@@ -257,7 +571,9 @@ export function getMockActionHistory(params = {}) {
   const size = Number(params.size) || 10
   const actionFilter = params.action || ''
   const resultFilter = params.result || ''
-  const search = String(params.search || '').trim().toLowerCase()
+  const search = String(params.search || '')
+    .trim()
+    .toLowerCase()
 
   const filtered = mockActions.filter((r) => {
     if (actionFilter && r.action !== actionFilter) return false

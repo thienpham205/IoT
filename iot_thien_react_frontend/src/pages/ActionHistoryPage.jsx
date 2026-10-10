@@ -30,18 +30,39 @@ const fetchHistoryPage = (params) => getActionHistory({ ...params, searchField: 
 // Cột "Trạng thái": đang chờ ACK / thất bại / trạng thái ON-OFF đã xác nhận
 function ActionStatus({ result, action }) {
   if (result === 'PENDING') {
-    return <span className="status-badge warn"><LoaderCircle size={11} className="spin" />Đang chờ ACK</span>
+    return (
+      <span className="status-badge warn">
+        <LoaderCircle size={11} className="spin" />
+        Đang chờ ACK
+      </span>
+    )
   }
-  if (result === 'FAILED') return <span className="status-badge bad"><i />Thất bại</span>
-  return <span className={`status-badge ${action === 'ON' ? 'good' : 'neutral'}`}><i />{action}</span>
+  if (result === 'FAILED')
+    return (
+      <span className="status-badge bad">
+        <i />
+        Thất bại
+      </span>
+    )
+  return (
+    <span className={`status-badge ${action === 'ON' ? 'good' : 'neutral'}`}>
+      <i />
+      {action}
+    </span>
+  )
 }
 
 export default function ActionHistoryPage() {
-  const { data, loading, applyFilters, setPage, setSize } = usePagedData(fetchHistoryPage, EMPTY_FILTERS)
+  const { data, loading, error, applyFilters, setPage, setSize } = usePagedData(fetchHistoryPage, EMPTY_FILTERS)
   const [filters, setFilters] = useState(EMPTY_FILTERS)
   const [devices, setDevices] = useState([])
 
-  useEffect(() => { getDevices().then(setDevices) }, [])
+  // Danh sách thiết bị cho ô lọc; lỗi thì ô lọc chỉ còn "Tất cả thiết bị" (lỗi đã hiện ở bảng)
+  useEffect(() => {
+    getDevices()
+      .then(setDevices)
+      .catch(() => setDevices([]))
+  }, [])
 
   const setFilter = (key) => (value) => setFilters((f) => ({ ...f, [key]: value }))
   const deviceOptions = [
@@ -60,7 +81,10 @@ export default function ActionHistoryPage() {
 
   return (
     <div className="page">
-      <PageHeader title="Lịch sử hoạt động" subtitle="Kiểm tra thiết bị, hành động, thời gian, kết quả và người thao tác" />
+      <PageHeader
+        title="Lịch sử hoạt động"
+        subtitle="Kiểm tra thiết bị, hành động, thời gian, kết quả và người thao tác"
+      />
 
       <FilterToolbar onSearch={handleSearch} onReset={handleReset}>
         <FilterField label="THIẾT BỊ">
@@ -82,6 +106,8 @@ export default function ActionHistoryPage() {
         </FilterField>
       </FilterToolbar>
 
+      {error ? <div className="page-error">{error}</div> : null}
+
       <DataTable
         headers={['ID', 'Tên thiết bị', 'Hành động', 'Trạng thái', 'Kết quả', 'Người thao tác', 'Thời gian']}
         rows={data.content}
@@ -91,10 +117,16 @@ export default function ActionHistoryPage() {
         renderRow={(row) => (
           <>
             <td className="technical-id">{row.historyId}</td>
-            <td><strong>{row.deviceName}</strong></td>
+            <td>
+              <strong>{row.deviceName}</strong>
+            </td>
             <td>{row.action}</td>
-            <td><ActionStatus result={row.result} action={row.action} /></td>
-            <td><StatusBadge value={row.result} /></td>
+            <td>
+              <ActionStatus result={row.result} action={row.action} />
+            </td>
+            <td>
+              <StatusBadge value={row.result} />
+            </td>
             <td>{row.userName}</td>
             <td>{formatTime(row.actionTime)}</td>
           </>

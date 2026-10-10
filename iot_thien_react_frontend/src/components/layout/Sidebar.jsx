@@ -14,7 +14,12 @@ export default function Sidebar() {
       <div className="brand">IoT_ThienPM</div>
       <nav className="sidebar-nav">
         {items.map(({ to, label, icon: Icon }) => (
-          <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => `side-link ${isActive ? 'active' : ''}`}>
+          <NavLink
+            key={to}
+            to={to}
+            end={to === '/'}
+            className={({ isActive }) => `side-link ${isActive ? 'active' : ''}`}
+          >
             <Icon size={21} strokeWidth={2} />
             <span>{label}</span>
           </NavLink>

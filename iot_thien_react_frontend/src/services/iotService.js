@@ -1,3 +1,4 @@
+import { DEMO_ACCOUNT, SENSOR_CODE } from '../constants'
 import { api } from './api'
 import {
   controlMockDevice,
@@ -8,9 +9,6 @@ import {
   getMockSensorHistory,
   getMockUser
 } from './mock/mockData'
-
-const DEMO_USERNAME = 'phamminhthien'
-const DEMO_PASSWORD = '123456'
 
 function isNetworkError(err) {
   return (
@@ -38,7 +36,7 @@ export function login(username, password) {
     () => {
       // Chế độ tĩnh: tài khoản demo đăng nhập bình thường; tài khoản khác vẫn cho vào
       // (giữ username đã nhập) để tiện trình bày báo cáo
-      if (username === DEMO_USERNAME && password === DEMO_PASSWORD) {
+      if (username === DEMO_ACCOUNT.username && password === DEMO_ACCOUNT.password) {
         return { accessToken: 'mock_access_token_phamminhthien', user: getMockUser() }
       }
       return { accessToken: 'mock_access_token_demo', user: { ...getMockUser(), username } }
@@ -52,13 +50,16 @@ export function getMe() {
 
 export function getLatestSensor() {
   return requestOrMock(
-    async () => (await api.get('/sensor-data/latest', { params: { sensorCode: 'SENSOR_01' } })).data,
+    async () => (await api.get('/sensor-data/latest', { params: { sensorCode: SENSOR_CODE } })).data,
     getMockLatestSensor
   )
 }
 
 export function getChart(params = {}) {
-  return requestOrMock(async () => (await api.get('/sensor-data/chart', { params })).data, () => getMockChart(params))
+  return requestOrMock(
+    async () => (await api.get('/sensor-data/chart', { params })).data,
+    () => getMockChart(params)
+  )
 }
 
 export function getDevices() {
@@ -73,9 +74,15 @@ export function controlDevice(deviceId, payload) {
 }
 
 export function getSensorHistory(params = {}) {
-  return requestOrMock(async () => (await api.get('/sensor-data', { params })).data, () => getMockSensorHistory(params))
+  return requestOrMock(
+    async () => (await api.get('/sensor-data', { params })).data,
+    () => getMockSensorHistory(params)
+  )
 }
 
 export function getActionHistory(params = {}) {
-  return requestOrMock(async () => (await api.get('/action-history', { params })).data, () => getMockActionHistory(params))
+  return requestOrMock(
+    async () => (await api.get('/action-history', { params })).data,
+    () => getMockActionHistory(params)
+  )
 }

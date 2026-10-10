@@ -54,6 +54,8 @@ npm install
 npm run dev
 ```
 
+Kiểm tra code frontend: `npm run lint` (ESLint) và `npm run format` (Prettier định dạng lại `src`).
+
 Firmware: chép `secrets.example.h` thành `secrets.h` (cùng thư mục sketch), điền WiFi và MQTT,
 rồi nạp bằng Arduino IDE với board **NodeMCU 1.0 (ESP-12E Module)**.
 
