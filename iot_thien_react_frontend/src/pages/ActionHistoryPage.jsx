@@ -2,7 +2,7 @@ import { LoaderCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import DataTable from '../components/common/DataTable'
 import FilterToolbar, { FilterField, FilterSelect } from '../components/common/FilterToolbar'
-import StatusBadge from '../components/common/StatusBadge'
+import ResultBadge from '../components/common/ResultBadge'
 import TablePagination from '../components/common/TablePagination'
 import PageHeader from '../components/layout/PageHeader'
 import { usePagedData } from '../hooks/usePagedData'
@@ -125,7 +125,7 @@ export default function ActionHistoryPage() {
               <ActionStatus result={row.result} action={row.action} />
             </td>
             <td>
-              <StatusBadge value={row.result} />
+              <ResultBadge result={row.result} />
             </td>
             <td>{row.userName}</td>
             <td>{formatTime(row.actionTime)}</td>
