@@ -168,12 +168,15 @@ function searchCondition(search, searchField) {
     params.push(Number(search))
   }
   if (any || searchField === 'value') {
+    // So trên giá trị đúng như giao diện hiển thị: DECIMAL 57.10 -> "57.1", 350.00 -> "350"
+    // (nếu so trên "57.10" thì gõ "10" sẽ khớp nhầm mọi giá trị có phần thập phân .10)
+    const valueText = 'CAST(CAST(x.value AS DOUBLE) AS CHAR)'
     const num = Number(search)
     if (Number.isNaN(num)) {
-      conditions.push('CAST(x.value AS CHAR) LIKE ?')
+      conditions.push(`${valueText} LIKE ?`)
       params.push(`%${search}%`)
     } else {
-      conditions.push('(CAST(x.value AS CHAR) LIKE ? OR x.value = ?)')
+      conditions.push(`(${valueText} LIKE ? OR x.value = ?)`)
       params.push(`%${search}%`, num)
     }
   }

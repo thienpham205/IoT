@@ -403,28 +403,29 @@ const mockSensorRecords = [
   }
 ]
 
+// Lọc giống backend /sensor-data: searchField quyết định tìm ở cột nào
+//   id    -> đúng ID (chỉ khi nhập số)
+//   value -> giá trị đo chứa chuỗi đã nhập (VD "10" khớp 10, 210, 10.5)
+//   time  -> thời gian (xem matchTimeQuery)
+//   all   -> một trong ba cột trên
+function matchSensorSearch(record, search, searchField) {
+  const any = searchField === 'all'
+  const byId = (any || searchField === 'id') && /^\d+$/.test(search) && record.dataId === Number(search)
+  const byValue = (any || searchField === 'value') && String(record.value).includes(search)
+  const byTime = (any || searchField === 'time') && matchTimeQuery(record.recordedAt, search)
+  return byId || byValue || byTime
+}
+
 export function getMockSensorHistory(params = {}) {
   const page = Number(params.page) || 0
   const size = Number(params.size) || 10
   const typeFilter = params.type || ''
-  const search = String(params.search || '')
-    .trim()
-    .toLowerCase()
+  const searchField = params.searchField || 'all'
+  const search = String(params.search || '').trim()
 
   const filtered = mockSensorRecords.filter((r) => {
-    if (typeFilter && typeFilter !== 'time' && r.sensorType !== typeFilter) return false
-    if (search) {
-      const matchVal = String(r.value).toLowerCase().includes(search)
-      const matchName = r.sensorName.toLowerCase().includes(search)
-      const matchId = String(r.dataId).includes(search)
-      const matchTime = matchTimeQuery(r.recordedAt, search)
-
-      if (typeFilter === 'time') {
-        return matchTime
-      }
-      return matchVal || matchName || matchId || matchTime
-    }
-    return true
+    if (typeFilter && r.sensorType !== typeFilter) return false
+    return !search || matchSensorSearch(r, search, searchField)
   })
 
   return paginate(filtered, page, size)
