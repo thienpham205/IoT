@@ -1,4 +1,3 @@
-import { ExternalLink, FileText, Github, LogOut, Mail, Palette, Send, ShieldCheck, UserRound } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PageHeader from '../components/layout/PageHeader'
@@ -20,24 +19,18 @@ const DEFAULT_USER = {
 }
 
 const INFO_ROWS = [
-  { key: 'username', label: 'Username', icon: UserRound },
-  { key: 'fullName', label: 'Họ tên', icon: UserRound },
-  { key: 'studentId', label: 'Mã sinh viên', icon: UserRound },
-  { key: 'email', label: 'Email', icon: Mail }
+  { key: 'username', label: 'Username' },
+  { key: 'fullName', label: 'Họ tên' },
+  { key: 'studentId', label: 'Mã sinh viên' },
+  { key: 'email', label: 'Email' }
 ]
 
 function resourceLinks(user) {
   return [
-    { title: 'GitHub', note: 'Mã nguồn dự án', icon: Github, href: user?.githubLink || '#' },
-    { title: 'Figma', note: 'Thiết kế giao diện', icon: Palette, href: user?.figmaLink || '#' },
-    {
-      title: 'Postman',
-      note: 'REST API collection',
-      icon: Send,
-      href: user?.postmanLink || POSTMAN_FILE,
-      download: true
-    },
-    { title: 'PDF', note: 'Báo cáo bài tập lớn', icon: FileText, href: user?.pdfLink || PDF_FILE }
+    { title: 'GitHub', note: 'Mã nguồn dự án', href: user?.githubLink || '#' },
+    { title: 'Figma', note: 'Thiết kế giao diện', href: user?.figmaLink || '#' },
+    { title: 'Postman', note: 'REST API collection', href: user?.postmanLink || POSTMAN_FILE, download: true },
+    { title: 'PDF', note: 'Báo cáo bài tập lớn', href: user?.pdfLink || PDF_FILE }
   ]
 }
 
@@ -59,7 +52,6 @@ export default function ProfilePage() {
 
   const logoutButton = (
     <button className="secondary-button" onClick={logout}>
-      <LogOut size={16} />
       Đăng xuất
     </button>
   )
@@ -77,36 +69,28 @@ export default function ProfilePage() {
           <div className="profile-avatar">{initialOf(show('fullName'))}</div>
           <h2>{show('fullName')}</h2>
           <p>{show('studentId')}</p>
-          <span className="role-badge">
-            <ShieldCheck size={15} />
-            {show('role')}
-          </span>
+          <span className="role-badge">{show('role')}</span>
         </section>
 
         <section className="card profile-details">
           <h3>Thông tin cá nhân</h3>
-          {INFO_ROWS.map(({ key, label, icon: Icon }) => (
+          {INFO_ROWS.map(({ key, label }) => (
             <div key={key} className="profile-info-row">
-              <Icon size={18} />
               <span>{label}</span>
               <strong>{show(key)}</strong>
             </div>
           ))}
 
           <div className="resource-grid">
-            {resourceLinks(user).map(({ title, note, icon: Icon, href, download }) => (
+            {resourceLinks(user).map(({ title, note, href, download }) => (
               <a
                 key={title}
                 href={href}
                 className="resource-card"
                 {...(download ? { download: true } : { target: '_blank', rel: 'noreferrer' })}
               >
-                <Icon />
-                <span>
-                  <b>{title}</b>
-                  <small>{note}</small>
-                </span>
-                <ExternalLink size={17} />
+                <b>{title}</b>
+                <small>{note}</small>
               </a>
             ))}
           </div>

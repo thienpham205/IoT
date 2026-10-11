@@ -1,4 +1,3 @@
-import { Eye, EyeOff, LockKeyhole, UserRound } from 'lucide-react'
 import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { DEMO_ACCOUNT } from '../constants'
@@ -54,8 +53,7 @@ export default function LoginPage() {
           <p>Nhập tài khoản để truy cập Dashboard.</p>
 
           <label>Tên đăng nhập</label>
-          <div className="input-with-icon">
-            <UserRound size={18} />
+          <div className="input-box">
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -65,8 +63,7 @@ export default function LoginPage() {
           </div>
 
           <label>Mật khẩu</label>
-          <div className="input-with-icon">
-            <LockKeyhole size={18} />
+          <div className="input-box">
             <input
               type={showPassword ? 'text' : 'password'}
               value={password}
@@ -74,8 +71,8 @@ export default function LoginPage() {
               placeholder="••••••••"
               autoComplete="current-password"
             />
-            <button type="button" className="icon-button" onClick={() => setShowPassword((v) => !v)}>
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            <button type="button" className="show-password" onClick={() => setShowPassword((v) => !v)}>
+              {showPassword ? 'Ẩn' : 'Hiện'}
             </button>
           </div>
 

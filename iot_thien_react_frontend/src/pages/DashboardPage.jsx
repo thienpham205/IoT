@@ -1,4 +1,3 @@
-import { Droplets, Lightbulb, Thermometer } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import StatCard from '../components/common/StatCard'
 import DeviceControl from '../components/dashboard/DeviceControl'
@@ -72,14 +71,12 @@ export default function DashboardPage() {
 
       <div className="metric-grid">
         <StatCard
-          icon={Thermometer}
-          tone="purple"
           title="Nhiệt độ"
           value={latest ? `${latest.temperature}°C` : '--'}
           note={`Cập nhật: ${formatTime(latest?.recordedAt)}`}
         />
-        <StatCard icon={Droplets} tone="cyan" title="Độ ẩm" value={latest ? `${latest.humidity}%` : '--'} />
-        <StatCard icon={Lightbulb} tone="amber" title="Độ sáng" value={latest ? `${latest.light} lux` : '--'} />
+        <StatCard title="Độ ẩm" value={latest ? `${latest.humidity}%` : '--'} />
+        <StatCard title="Độ sáng" value={latest ? `${latest.light} lux` : '--'} />
       </div>
 
       <div className="dashboard-layout">

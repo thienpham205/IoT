@@ -1,4 +1,3 @@
-import { LoaderCircle } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import DataTable from '../components/common/DataTable'
 import FilterToolbar, { FilterField, FilterSelect } from '../components/common/FilterToolbar'
@@ -32,7 +31,7 @@ function ActionStatus({ result, action }) {
   if (result === 'PENDING') {
     return (
       <span className="status-badge warn">
-        <LoaderCircle size={11} className="spin" />
+        <i />
         Đang chờ ACK
       </span>
     )

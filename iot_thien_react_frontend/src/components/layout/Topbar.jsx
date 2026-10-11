@@ -1,4 +1,3 @@
-import { Clock3 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getUser } from '../../services/auth'
@@ -21,10 +20,7 @@ export default function Topbar() {
           <span className="mini-avatar">{initialOf(getUser()?.fullName)}</span>
           Hồ sơ
         </button>
-        <div className="top-pill">
-          <Clock3 size={18} color="#6847ff" />
-          {formatClock(now)}
-        </div>
+        <div className="top-pill">{formatClock(now)}</div>
       </div>
     </header>
   )

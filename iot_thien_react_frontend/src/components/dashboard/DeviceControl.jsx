@@ -1,4 +1,3 @@
-import { Lightbulb, LoaderCircle } from 'lucide-react'
 import { useState } from 'react'
 import { controlDevice } from '../../services/iotService'
 
@@ -31,10 +30,6 @@ export default function DeviceControl({ devices, onConfirmed }) {
           const pending = pendingId === device.deviceId
           return (
             <div className="device-card" key={device.deviceId}>
-              {/* Hệ thống hiện chỉ có thiết bị Đèn (LIGHT_01) */}
-              <div className={`device-icon ${device.deviceType.toLowerCase()}`}>
-                <Lightbulb size={23} />
-              </div>
               <div className="device-copy">
                 <strong>{device.deviceName}</strong>
                 <span>{device.location}</span>
@@ -47,8 +42,8 @@ export default function DeviceControl({ devices, onConfirmed }) {
                     className={`mode-button ${device.status === action ? 'active' : ''}`}
                     onClick={() => handleControl(device, action)}
                   >
-                    {pending ? <LoaderCircle className="spin" size={14} /> : null}
-                    {action}
+                    {/* Trong lúc chờ backend trả lời, cả 2 nút bị khóa và hiện "..." */}
+                    {pending ? '...' : action}
                   </button>
                 ))}
               </div>
