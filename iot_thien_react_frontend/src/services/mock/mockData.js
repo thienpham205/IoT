@@ -1,7 +1,7 @@
 // Dữ liệu mẫu tĩnh cố định (Static Mode) phục vụ báo cáo Frontend
 // Hỗ trợ tìm kiếm theo ngày, giờ, phút linh hoạt (VD: 5:30, 17:30, 07/10/2026)
 
-export const mockUser = {
+const mockUser = {
   id: 1,
   username: 'phamminhthien',
   fullName: 'Phạm Minh Thiện',
@@ -82,8 +82,8 @@ export function getMockLatestSensor() {
   return STATIC_LATEST_SENSOR
 }
 
-// Biểu đồ tĩnh cố định: đường ngang mềm mại, hơi lượn sóng nhẹ nhàng
-const STATIC_CHART_LIVE = {
+// Biểu đồ thời gian thực tĩnh (cùng dạng response GET /sensor-data/chart?points=...)
+const STATIC_CHART = {
   labels: [
     '16:20:00',
     '16:25:00',
@@ -110,65 +110,13 @@ const STATIC_CHART_LIVE = {
   timezone: 'Asia/Ho_Chi_Minh'
 }
 
-const STATIC_CHART_1H = {
-  labels: [
-    '16:30',
-    '16:35',
-    '16:40',
-    '16:45',
-    '16:50',
-    '16:55',
-    '17:00',
-    '17:05',
-    '17:10',
-    '17:15',
-    '17:20',
-    '17:25',
-    '17:30'
-  ],
-  series: {
-    temperature: [28.3, 28.4, 28.4, 28.5, 28.5, 28.6, 28.5, 28.5, 28.5, 28.4, 28.5, 28.5, 28.5],
-    humidity: [64.8, 65.0, 65.0, 65.2, 65.4, 65.2, 65.0, 65.0, 64.8, 65.0, 65.0, 65.2, 65.0],
-    light: [347, 349, 350, 351, 353, 352, 350, 350, 349, 350, 350, 351, 350]
-  },
-  interval: '1m',
-  timezone: 'Asia/Ho_Chi_Minh'
-}
-
-const STATIC_CHART_24H = {
-  labels: [
-    '18:00',
-    '20:00',
-    '22:00',
-    '00:00',
-    '02:00',
-    '04:00',
-    '06:00',
-    '08:00',
-    '10:00',
-    '12:00',
-    '14:00',
-    '16:00',
-    '17:30'
-  ],
-  series: {
-    temperature: [28.2, 28.0, 27.8, 27.5, 27.4, 27.5, 27.8, 28.2, 28.5, 28.7, 28.6, 28.5, 28.5],
-    humidity: [65.5, 66.0, 66.5, 67.0, 67.2, 67.0, 66.5, 65.5, 64.5, 64.0, 64.5, 64.8, 65.0],
-    light: [250, 100, 20, 0, 0, 30, 180, 300, 360, 380, 370, 360, 350]
-  },
-  interval: '1h',
-  timezone: 'Asia/Ho_Chi_Minh'
-}
-
-export function getMockChart(params = {}) {
-  if (params.interval === '1h') return STATIC_CHART_24H
-  if (params.interval === '1m') return STATIC_CHART_1H
-  return STATIC_CHART_LIVE
+export function getMockChart() {
+  return STATIC_CHART
 }
 
 // Hàm so khớp thời gian theo giờ 24h: "5:30" chỉ khớp 05:30 (không khớp 17:30 hay 15:30),
 // "17h" khớp mọi bản ghi trong giờ 17; các chuỗi khác (ngày, dd/MM/yyyy HH:mm...) so khớp chuỗi con
-export function matchTimeQuery(dateValue, search) {
+function matchTimeQuery(dateValue, search) {
   if (!search) return true
   if (!dateValue) return false
   const s = String(search).trim().toLowerCase()

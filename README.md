@@ -24,7 +24,7 @@ Frontend không kết nối trực tiếp MQTT hay MySQL; mọi thao tác đi qu
 ## Giao diện
 
 1. **Đăng nhập** – tài khoản demo `phamminhthien` / `123456`
-2. **Trang chủ** – giá trị đo mới nhất, biểu đồ (thời gian thực / 1 giờ / 24 giờ), bật/tắt đèn
+2. **Trang chủ** – giá trị đo mới nhất, biểu đồ thời gian thực (20 lần đo gần nhất), bật/tắt đèn kèm trạng thái Đang bật / Đang tắt
 3. **Cảm biến** – lọc theo loại cảm biến, tìm theo giá trị hoặc thời gian, phân trang 5 / 10 / 20 dòng
 4. **Lịch sử hoạt động** – lọc theo thiết bị, hành động, trạng thái, thời gian; phân trang
 5. **Hồ sơ** – thông tin tài khoản, liên kết GitHub / Figma / Postman / báo cáo PDF

@@ -56,10 +56,7 @@ export function getLatestSensor() {
 }
 
 export function getChart(params = {}) {
-  return requestOrMock(
-    async () => (await api.get('/sensor-data/chart', { params })).data,
-    () => getMockChart(params)
-  )
+  return requestOrMock(async () => (await api.get('/sensor-data/chart', { params })).data, getMockChart)
 }
 
 export function getDevices() {

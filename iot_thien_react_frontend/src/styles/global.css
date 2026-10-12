@@ -195,11 +195,6 @@ a {
   line-height: 1.05;
   margin-top: 3px;
 }
-.stat-note {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 5px;
-}
 .dashboard-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.42fr) 390px;
@@ -224,14 +219,6 @@ a {
   font-size: 11px;
   color: var(--muted);
   margin: 5px 0 0;
-}
-.compact-select {
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: #fff;
-  color: var(--text);
-  padding: 9px 32px 9px 11px;
-  outline: none;
 }
 .chart-area {
   height: 330px;
