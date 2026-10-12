@@ -108,7 +108,7 @@ export default function ActionHistoryPage() {
       {error ? <div className="page-error">{error}</div> : null}
 
       <DataTable
-        headers={['ID', 'Tên thiết bị', 'Hành động', 'Trạng thái', 'Kết quả', 'Người thao tác', 'Thời gian']}
+        headers={['ID', 'Tên thiết bị', 'Hành động', 'Trạng thái', 'Kết quả', 'Thời gian', 'Người thao tác']}
         rows={data.content}
         loading={loading}
         emptyText="Không có dữ liệu phù hợp."
@@ -126,8 +126,8 @@ export default function ActionHistoryPage() {
             <td>
               <ResultBadge result={row.result} />
             </td>
-            <td>{row.userName}</td>
             <td>{formatTime(row.actionTime)}</td>
+            <td>{row.userName}</td>
           </>
         )}
         footer={<TablePagination data={data} onPageChange={setPage} onSizeChange={setSize} />}
