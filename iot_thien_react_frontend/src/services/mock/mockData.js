@@ -400,8 +400,8 @@ const mockActions = [
     deviceName: 'Đèn',
     action: 'OFF',
     actionTime: '2026-10-07T17:30:15+07:00',
-    confirmedAt: '2026-10-07T17:30:16+07:00',
-    result: 'SUCCESS',
+    confirmedAt: null,
+    result: 'PENDING',
     userName: 'Phạm Minh Thiện',
     area: 'Phòng khách'
   },
@@ -424,8 +424,8 @@ const mockActions = [
     deviceName: 'Đèn',
     action: 'OFF',
     actionTime: '2026-10-07T17:28:15+07:00',
-    confirmedAt: '2026-10-07T17:28:16+07:00',
-    result: 'SUCCESS',
+    confirmedAt: null,
+    result: 'FAILED',
     userName: 'Phạm Minh Thiện',
     area: 'Phòng khách'
   },
@@ -460,8 +460,8 @@ const mockActions = [
     deviceName: 'Đèn',
     action: 'ON',
     actionTime: '2026-10-07T17:08:22+07:00',
-    confirmedAt: '2026-10-07T17:08:23+07:00',
-    result: 'SUCCESS',
+    confirmedAt: null,
+    result: 'FAILED',
     userName: 'Phạm Minh Thiện',
     area: 'Phòng khách'
   },
