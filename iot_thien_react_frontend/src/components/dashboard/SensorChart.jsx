@@ -68,10 +68,13 @@ export default function SensorChart({ chart }) {
         grid: { drawOnChartArea: false },
         ticks: { color: '#20b9b0', stepSize: 10 }
       },
+      // Trục Độ sáng: bên phải, cạnh trục Độ ẩm; số màu cam khớp màu đường
       yLight: {
-        display: false,
+        position: 'right',
         suggestedMin: 0,
-        suggestedMax: 600
+        suggestedMax: 600,
+        grid: { drawOnChartArea: false },
+        ticks: { color: '#f3a11a', stepSize: 100 }
       }
     }
   }
