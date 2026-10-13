@@ -45,7 +45,7 @@ function searchCondition(search, searchField) {
     params.push(`%${search}%`)
   }
   if (searchField === 'all' || searchField === 'time') {
-    const time = timeSearchCondition('ah.action_time', search, { matchRaw: true })
+    const time = timeSearchCondition('ah.action_time', search)
     conditions.push(time.sql)
     params.push(...time.params)
   }

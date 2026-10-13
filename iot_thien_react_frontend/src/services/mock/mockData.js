@@ -116,36 +116,35 @@ export function getMockChart() {
 
 // Hàm so khớp thời gian theo giờ 24h: "5:30" chỉ khớp 05:30 (không khớp 17:30 hay 15:30),
 // "17h" khớp mọi bản ghi trong giờ 17; các chuỗi khác (ngày, dd/MM/yyyy HH:mm...) so khớp chuỗi con
+// So khớp CHÍNH XÁC thời gian (giờ 24h). Chỉ nhận các dạng:
+//   "17:30" / "17:30:15"            -> đúng giờ:phút[:giây]
+//   "17h"                            -> cả khung giờ 17
+//   "07/10/2026"                     -> cả ngày đó
+//   "07/10/2026 17:30[:15]"          -> đúng ngày + giờ
+// Gõ dạng khác (VD "1", "10", "abc") -> không khớp.
 function matchTimeQuery(dateValue, search) {
-  if (!search) return true
-  if (!dateValue) return false
-  const s = String(search).trim().toLowerCase()
+  const s = String(search || '').trim()
   if (!s) return true
-
   const d = new Date(dateValue)
-  if (isNaN(d.getTime())) return false
+  if (!dateValue || isNaN(d.getTime())) return false
 
-  const pad = (n) => String(n).padStart(2, '0')
-  const day = d.getDate()
-  const month = d.getMonth() + 1
-  const year = d.getFullYear()
-  const hour = d.getHours()
-  const min = d.getMinutes()
-  const sec = d.getSeconds()
+  const sameClock = (h, m, sec) =>
+    d.getHours() === +h && d.getMinutes() === +m && (sec === undefined || d.getSeconds() === +sec)
 
-  // Giờ:phút[:giây] (VD: "5:30", "05:30", "17:30:15") -> so khớp chính xác
-  const m = s.match(/^(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?$/)
-  if (m) {
-    return hour === +m[1] && min === +m[2] && (m[3] === undefined || sec === +m[3])
+  const date = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/)
+  if (date) {
+    const [, day, month, year, h, m, sec] = date
+    const sameDay = d.getDate() === +day && d.getMonth() + 1 === +month && d.getFullYear() === +year
+    return sameDay && (h === undefined || sameClock(h, m, sec))
   }
 
-  // Chỉ giờ (VD: "5h", "17h", "17:") -> mọi bản ghi trong giờ đó
-  const hourMatch = s.match(/^(\d{1,2})(?:h|:)$/)
-  if (hourMatch) return hour === +hourMatch[1]
+  const clock = s.match(/^(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?$/)
+  if (clock) return sameClock(clock[1], clock[2], clock[3])
 
-  // Ngày / ngày giờ đầy đủ: so khớp chuỗi con trên định dạng hiển thị dd/MM/yyyy HH:mm:ss
-  const formatted = `${pad(day)}/${pad(month)}/${year} ${pad(hour)}:${pad(min)}:${pad(sec)}`
-  return formatted.includes(s) || `${day}/${month}/${year}`.includes(s)
+  const hourOnly = s.match(/^(\d{1,2})h$/i)
+  if (hourOnly) return d.getHours() === +hourOnly[1]
+
+  return false
 }
 
 // Dữ liệu đo cảm biến cố định
@@ -518,23 +517,17 @@ const mockActions = [
 export function getMockActionHistory(params = {}) {
   const page = Number(params.page) || 0
   const size = Number(params.size) || 10
+  const deviceFilter = params.deviceId ? Number(params.deviceId) : null
   const actionFilter = params.action || ''
   const resultFilter = params.result || ''
-  const search = String(params.search || '')
-    .trim()
-    .toLowerCase()
+  const search = String(params.search || '').trim()
 
+  // Trang Lịch sử hoạt động luôn gửi searchField = 'time': ô tìm kiếm chỉ tìm theo thời gian
   const filtered = mockActions.filter((r) => {
+    if (deviceFilter && r.deviceId !== deviceFilter) return false
     if (actionFilter && r.action !== actionFilter) return false
     if (resultFilter && r.result !== resultFilter) return false
-    if (search) {
-      const matchTime = matchTimeQuery(r.actionTime, search)
-      const matchDevice = r.deviceName.toLowerCase().includes(search)
-      const matchUser = r.userName.toLowerCase().includes(search)
-      const matchId = String(r.historyId).includes(search)
-      if (!matchTime && !matchDevice && !matchUser && !matchId) return false
-    }
-    return true
+    return !search || matchTimeQuery(r.actionTime, search)
   })
 
   return paginate(filtered, page, size)
