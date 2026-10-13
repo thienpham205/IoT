@@ -3,8 +3,8 @@ import { controlDevice } from '../../services/iotService'
 
 // Dòng "Trạng thái" trên thẻ thiết bị: chữ + màu badge theo trạng thái đèn
 const STATUS_LABELS = {
-  ON: { text: 'Đang bật', tone: 'good' },
-  OFF: { text: 'Đang tắt', tone: 'neutral' }
+  ON: { text: 'Đang bật', tone: 'bad' }, // đỏ
+  OFF: { text: 'Đang tắt', tone: 'good' } // xanh
 }
 
 function DeviceStatus({ status, pendingAction }) {
