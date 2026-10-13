@@ -353,13 +353,13 @@ const mockSensorRecords = [
 
 // Lọc giống backend /sensor-data: searchField quyết định tìm ở cột nào
 //   id    -> đúng ID (chỉ khi nhập số)
-//   value -> giá trị đo chứa chuỗi đã nhập (VD "10" khớp 10, 210, 10.5)
+//   value -> giá trị đo bắt đầu bằng chuỗi đã nhập (VD "39" khớp 391, 392; "1" không khớp 310, 61)
 //   time  -> thời gian (xem matchTimeQuery)
 //   all   -> một trong ba cột trên
 function matchSensorSearch(record, search, searchField) {
   const any = searchField === 'all'
   const byId = (any || searchField === 'id') && /^\d+$/.test(search) && record.dataId === Number(search)
-  const byValue = (any || searchField === 'value') && String(record.value).includes(search)
+  const byValue = (any || searchField === 'value') && String(record.value).startsWith(search)
   const byTime = (any || searchField === 'time') && matchTimeQuery(record.recordedAt, search)
   return byId || byValue || byTime
 }
