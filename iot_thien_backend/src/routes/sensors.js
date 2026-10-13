@@ -168,16 +168,12 @@ function searchCondition(search, searchField) {
     params.push(Number(search))
   }
   if (any || searchField === 'value') {
-    // Giá trị đo BẮT ĐẦU BẰNG chuỗi đã nhập ("39" khớp 391, 392; "1" không khớp 310, 61).
-    // So trên giá trị đúng như giao diện hiển thị: DECIMAL 57.10 -> "57.1", 350.00 -> "350"
-    const valueText = 'CAST(CAST(x.value AS DOUBLE) AS CHAR)'
+    // Giá trị đo BẰNG ĐÚNG số đã nhập ("350" khớp 350; "35" không khớp; "28.50" khớp 28.5).
+    // Nhập chữ (không phải số) thì không có điều kiện nào -> không khớp dòng nào.
     const num = Number(search)
-    if (Number.isNaN(num)) {
-      conditions.push(`${valueText} LIKE ?`)
-      params.push(`${search}%`)
-    } else {
-      conditions.push(`(${valueText} LIKE ? OR x.value = ?)`)
-      params.push(`${search}%`, num)
+    if (!Number.isNaN(num)) {
+      conditions.push('x.value = ?')
+      params.push(num)
     }
   }
   if (any || searchField === 'time') {
