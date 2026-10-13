@@ -24,6 +24,16 @@ let mockDeviceList = [
     status: 'OFF',
     mode: 'MANUAL',
     lastSeen: '2026-10-07T17:30:00+07:00'
+  },
+  {
+    deviceId: 2,
+    deviceCode: 'LIGHT_02',
+    deviceName: 'Đèn 2',
+    deviceType: 'LIGHT',
+    location: 'Phòng ngủ',
+    status: 'OFF',
+    mode: 'MANUAL',
+    lastSeen: '2026-10-07T17:30:00+07:00'
   }
 ]
 

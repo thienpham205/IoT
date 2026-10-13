@@ -32,10 +32,11 @@ async function main() {
   )
 
   // LIGHT_01 khớp đúng device_code mà firmware ESP8266 (esp8266-01) hiện đang publish/subscribe
-  // qua MQTT (relay/LED thật duy nhất trên chân D0). Không seed Quạt/Điều hòa vì chưa có relay
-  // vật lý cho 2 thiết bị đó - tránh gây hiểu lầm khi hiển thị lên giao diện.
+  // qua MQTT (LED thật trên chân D0). LIGHT_02 là đèn thứ hai trên giao diện, firmware hiện
+  // chưa có chân/relay cho nó nên điều khiển sẽ không nhận được ACK từ mạch.
   const devices = [
-    ['LIGHT_01', 'Đèn', 'LIGHT', 'Phòng khách']
+    ['LIGHT_01', 'Đèn', 'LIGHT', 'Phòng khách'],
+    ['LIGHT_02', 'Đèn 2', 'LIGHT', 'Phòng ngủ']
   ]
   for (const [code, name, type, location] of devices) {
     await pool.query(
@@ -46,7 +47,7 @@ async function main() {
     )
   }
 
-  console.log('Seed hoàn tất: 1 user (phamminhthien/123456), 1 sensor, 1 device.')
+  console.log(`Seed hoàn tất: 1 user (phamminhthien/123456), 1 sensor, ${devices.length} device.`)
   await pool.end()
 }
 
