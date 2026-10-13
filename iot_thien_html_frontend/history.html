@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lịch sử hoạt động · IoT_ThienPM</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">IoT_ThienPM</div>
+        <nav class="sidebar-nav">
+          <a class="side-link" href="index.html">Trang chủ</a>
+          <a class="side-link" href="sensors.html">Cảm biến</a>
+          <a class="side-link active" href="history.html">Lịch sử hoạt động</a>
+          <a class="side-link" href="profile.html">Hồ sơ</a>
+        </nav>
+      </aside>
+
+      <main class="app-main">
+        <header class="topbar">
+          <span class="topbar-brand">IoT_ThienPM</span>
+          <div class="topbar-actions">
+            <a class="top-pill" href="profile.html"><span class="mini-avatar"></span>Hồ sơ</a>
+            <div class="top-pill" id="clock"></div>
+          </div>
+        </header>
+
+        <div class="page">
+          <div class="page-header">
+            <div>
+              <h1>Lịch sử hoạt động</h1>
+              <p>Kiểm tra thiết bị, hành động, thời gian, kết quả và người thao tác</p>
+            </div>
+          </div>
+
+          <form class="filter-toolbar" id="filter-form">
+            <div class="filter-item">
+              <label for="device">THIẾT BỊ</label>
+              <!-- Danh sách thiết bị được thêm bằng JavaScript -->
+              <select id="device"><option value="">Tất cả thiết bị</option></select>
+            </div>
+            <div class="filter-item">
+              <label for="action">HÀNH ĐỘNG</label>
+              <select id="action">
+                <option value="">Tất cả hành động</option>
+                <option value="ON">BẬT (ON)</option>
+                <option value="OFF">TẮT (OFF)</option>
+              </select>
+            </div>
+            <div class="filter-item">
+              <label for="result">TRẠNG THÁI</label>
+              <select id="result">
+                <option value="">Tất cả trạng thái</option>
+                <option value="SUCCESS">Thành công (SUCCESS)</option>
+                <option value="FAILED">Thất bại (FAILED)</option>
+                <option value="PENDING">Đang chờ (PENDING)</option>
+              </select>
+            </div>
+            <div class="filter-item">
+              <label for="search">THỜI GIAN</label>
+              <input type="text" id="search" placeholder="Nhập giờ hoặc ngày (VD: 5:30, 17:30, 07/10/2026)..." />
+            </div>
+            <div class="filter-buttons">
+              <button type="submit" class="search-btn">Tìm kiếm</button>
+              <button type="button" class="reset-btn" id="reset">Đặt lại</button>
+            </div>
+          </form>
+
+          <div class="page-error" id="error" hidden></div>
+
+          <section class="card table-card">
+            <div class="responsive-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th><th>Tên thiết bị</th><th>Hành động</th><th>Trạng thái</th>
+                    <th>Kết quả</th><th>Thời gian</th><th>Người thao tác</th>
+                  </tr>
+                </thead>
+                <tbody id="rows"></tbody>
+              </table>
+            </div>
+            <div class="table-footer" id="footer"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/format.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/pages/history.js"></script>
+  </body>
+</html>

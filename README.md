@@ -19,6 +19,7 @@ Frontend không kết nối trực tiếp MQTT hay MySQL; mọi thao tác đi qu
 |---|---|
 | `iot_thien_backend/` | API Express, kết nối MySQL và MQTT broker |
 | `iot_thien_react_frontend/` | Giao diện React (Vite) |
+| `iot_thien_html_frontend/` | Cùng giao diện viết bằng HTML/CSS/JavaScript thuần (không cần build) |
 | `iot_thien_firmware/sketch_aug29a/` | Firmware ESP8266 (Arduino) |
 
 ## Giao diện
@@ -54,7 +55,11 @@ npm install
 npm run dev
 ```
 
-Kiểm tra code frontend: `npm run lint` (ESLint) và `npm run format` (Prettier định dạng lại `src`).
+Bản HTML thuần (thay cho bước 3): mở thư mục `iot_thien_html_frontend` bằng VS Code,
+chuột phải `login.html` → **Open with Live Server** (cổng 5500). Địa chỉ backend đặt trong `js/config.js`;
+không kết nối được backend thì trang tự dùng dữ liệu mẫu trong `js/mock-data.js`.
+
+Kiểm tra code frontend React: `npm run lint` (ESLint) và `npm run format` (Prettier định dạng lại `src`).
 
 Firmware: chép `secrets.example.h` thành `secrets.h` (cùng thư mục sketch), điền WiFi và MQTT,
 rồi nạp bằng Arduino IDE với board **NodeMCU 1.0 (ESP-12E Module)**.

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập · IoT_ThienPM</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="login-page">
+      <div class="login-visual">
+        <div class="visual-orb orb-1"></div>
+        <div class="visual-orb orb-2"></div>
+        <div class="login-brand">IoT_ThienPM</div>
+        <div class="login-message">
+          <span class="eyebrow">ESP8266 · MQTT · Web</span>
+          <h1>Giám sát môi trường.<br />Điều khiển thiết bị.</h1>
+          <p>Theo dõi nhiệt độ, độ ẩm, ánh sáng và điều khiển thiết bị từ một giao diện thống nhất.</p>
+        </div>
+      </div>
+
+      <div class="login-panel">
+        <form class="login-card" id="login-form">
+          <div class="login-logo">IoT_ThienPM</div>
+          <h2>Đăng nhập</h2>
+          <p>Nhập tài khoản để truy cập Dashboard.</p>
+
+          <label for="username">Tên đăng nhập</label>
+          <div class="input-box">
+            <input id="username" autocomplete="username" />
+          </div>
+
+          <label for="password">Mật khẩu</label>
+          <div class="input-box">
+            <input id="password" type="password" placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="show-password" id="toggle-password">Hiện</button>
+          </div>
+
+          <div class="form-error" id="error" hidden></div>
+
+          <button class="login-button" id="submit">Đăng nhập</button>
+          <div class="demo-hint" id="demo-hint"></div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/format.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/pages/login.js"></script>
+  </body>
+</html>

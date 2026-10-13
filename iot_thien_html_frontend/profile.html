@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hồ sơ · IoT_ThienPM</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">IoT_ThienPM</div>
+        <nav class="sidebar-nav">
+          <a class="side-link" href="index.html">Trang chủ</a>
+          <a class="side-link" href="sensors.html">Cảm biến</a>
+          <a class="side-link" href="history.html">Lịch sử hoạt động</a>
+          <a class="side-link active" href="profile.html">Hồ sơ</a>
+        </nav>
+      </aside>
+
+      <main class="app-main">
+        <header class="topbar">
+          <span class="topbar-brand">IoT_ThienPM</span>
+          <div class="topbar-actions">
+            <a class="top-pill" href="profile.html"><span class="mini-avatar"></span>Hồ sơ</a>
+            <div class="top-pill" id="clock"></div>
+          </div>
+        </header>
+
+        <div class="page">
+          <div class="page-header">
+            <div>
+              <h1>Hồ sơ</h1>
+              <p>Thông tin tài khoản và các liên kết tài nguyên của dự án</p>
+            </div>
+            <div><button class="secondary-button" id="logout">Đăng xuất</button></div>
+          </div>
+
+          <div class="profile-layout">
+            <section class="card profile-summary">
+              <div class="profile-avatar" id="avatar"></div>
+              <h2 data-field="fullName"></h2>
+              <p data-field="studentId"></p>
+              <span class="role-badge" data-field="role"></span>
+            </section>
+
+            <section class="card profile-details">
+              <h3>Thông tin cá nhân</h3>
+              <div class="profile-info-row"><span>Username</span><strong data-field="username"></strong></div>
+              <div class="profile-info-row"><span>Họ tên</span><strong data-field="fullName"></strong></div>
+              <div class="profile-info-row"><span>Mã sinh viên</span><strong data-field="studentId"></strong></div>
+              <div class="profile-info-row"><span>Email</span><strong data-field="email"></strong></div>
+
+              <div class="resource-grid">
+                <a class="resource-card" id="link-github" target="_blank" rel="noreferrer">
+                  <b>GitHub</b><small>Mã nguồn dự án</small>
+                </a>
+                <a class="resource-card" id="link-figma" target="_blank" rel="noreferrer">
+                  <b>Figma</b><small>Thiết kế giao diện</small>
+                </a>
+                <a class="resource-card" id="link-postman" download>
+                  <b>Postman</b><small>REST API collection</small>
+                </a>
+                <a class="resource-card" id="link-pdf" target="_blank" rel="noreferrer">
+                  <b>PDF</b><small>Báo cáo bài tập lớn</small>
+                </a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/format.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/pages/profile.js"></script>
+  </body>
+</html>

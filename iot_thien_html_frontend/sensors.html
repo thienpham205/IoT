@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cảm biến · IoT_ThienPM</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">IoT_ThienPM</div>
+        <nav class="sidebar-nav">
+          <a class="side-link" href="index.html">Trang chủ</a>
+          <a class="side-link active" href="sensors.html">Cảm biến</a>
+          <a class="side-link" href="history.html">Lịch sử hoạt động</a>
+          <a class="side-link" href="profile.html">Hồ sơ</a>
+        </nav>
+      </aside>
+
+      <main class="app-main">
+        <header class="topbar">
+          <span class="topbar-brand">IoT_ThienPM</span>
+          <div class="topbar-actions">
+            <a class="top-pill" href="profile.html"><span class="mini-avatar"></span>Hồ sơ</a>
+            <div class="top-pill" id="clock"></div>
+          </div>
+        </header>
+
+        <div class="page">
+          <div class="page-header">
+            <div>
+              <h1>Cảm biến</h1>
+              <p>Tra cứu lịch sử giá trị cảm biến theo loại, giá trị hoặc thời gian</p>
+            </div>
+          </div>
+
+          <!-- Thanh lọc: chọn/gõ xong phải bấm Tìm kiếm mới lọc -->
+          <form class="filter-toolbar" id="filter-form">
+            <div class="filter-item">
+              <label id="type-label" for="type">LOẠI CẢM BIẾN</label>
+              <select id="type">
+                <option value="">Tất cả cảm biến</option>
+                <option value="temperature">Nhiệt độ</option>
+                <option value="humidity">Độ ẩm</option>
+                <option value="light">Ánh sáng</option>
+                <option value="time">Thời gian</option>
+              </select>
+            </div>
+            <div class="filter-item">
+              <label id="search-label" for="search">GIÁ TRỊ</label>
+              <input type="text" id="search" placeholder="Nhập giá trị cần tìm..." />
+            </div>
+            <div class="filter-buttons">
+              <button type="submit" class="search-btn">Tìm kiếm</button>
+              <button type="button" class="reset-btn" id="reset">Đặt lại</button>
+            </div>
+          </form>
+
+          <div class="page-error" id="error" hidden></div>
+
+          <section class="card table-card">
+            <div class="responsive-table">
+              <table>
+                <thead>
+                  <tr><th>ID</th><th>Tên cảm biến</th><th>Giá trị đo</th><th>Thời gian</th></tr>
+                </thead>
+                <tbody id="rows"></tbody>
+              </table>
+            </div>
+            <div class="table-footer" id="footer"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/format.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/mock-data.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/pages/sensors.js"></script>
+  </body>
+</html>
