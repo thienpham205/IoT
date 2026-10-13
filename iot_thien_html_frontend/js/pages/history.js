@@ -1,4 +1,4 @@
-// Trang Lịch sử hoạt động (tương ứng pages/ActionHistoryPage.jsx + components/common/ResultBadge.jsx)
+// Trang Lịch sử hoạt động
 
 initLayout()
 

@@ -1,4 +1,4 @@
-// Trang chủ (tương ứng pages/DashboardPage.jsx + components/dashboard/SensorChart.jsx + DeviceControl.jsx)
+// Trang chủ
 
 initLayout()
 

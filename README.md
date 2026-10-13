@@ -1,14 +1,14 @@
 # IoT_ThienPM
 
 Hệ thống giám sát môi trường (nhiệt độ, độ ẩm, ánh sáng) và điều khiển đèn qua web,
-dùng ESP8266 + MQTT + Node.js + React.
+dùng ESP8266 + MQTT + Node.js + HTML/CSS/JavaScript.
 
 ```text
 ESP8266 (DHT11, quang trở, LED D0)
    ⇅ MQTT (Mosquitto)
 Node.js / Express backend ── MySQL
    ⇅ REST/JSON + JWT
-React frontend
+Frontend HTML/CSS/JavaScript
 ```
 
 Frontend không kết nối trực tiếp MQTT hay MySQL; mọi thao tác đi qua REST API của backend.
@@ -18,8 +18,7 @@ Frontend không kết nối trực tiếp MQTT hay MySQL; mọi thao tác đi qu
 | Thư mục | Nội dung |
 |---|---|
 | `iot_thien_backend/` | API Express, kết nối MySQL và MQTT broker |
-| `iot_thien_react_frontend/` | Giao diện React (Vite) |
-| `iot_thien_html_frontend/` | Cùng giao diện viết bằng HTML/CSS/JavaScript thuần (không cần build) |
+| `iot_thien_html_frontend/` | Giao diện HTML/CSS/JavaScript thuần (không cần build) |
 | `iot_thien_firmware/sketch_aug29a/` | Firmware ESP8266 (Arduino) |
 
 ## Giao diện
@@ -30,7 +29,7 @@ Frontend không kết nối trực tiếp MQTT hay MySQL; mọi thao tác đi qu
 4. **Lịch sử hoạt động** – lọc theo thiết bị, hành động, trạng thái, thời gian; phân trang
 5. **Hồ sơ** – thông tin tài khoản, liên kết GitHub / Figma / Postman / báo cáo PDF
 
-Khi không kết nối được backend, frontend tự chuyển sang dữ liệu mẫu (`src/services/mock/mockData.js`).
+Khi không kết nối được backend, frontend tự chuyển sang dữ liệu mẫu (`iot_thien_html_frontend/js/mock-data.js`).
 
 ## Chạy local
 
@@ -47,19 +46,10 @@ cp .env.example .env      # điền JWT_SECRET, tài khoản MQTT
 npm install
 npm run seed              # tạo tài khoản demo, cảm biến SENSOR_01, đèn LIGHT_01
 npm run dev
-
-# 3. Frontend (cổng 5173)
-cd ../iot_thien_react_frontend
-cp .env.example .env
-npm install
-npm run dev
 ```
 
-Bản HTML thuần (thay cho bước 3): mở thư mục `iot_thien_html_frontend` bằng VS Code,
-chuột phải `login.html` → **Open with Live Server** (cổng 5500). Địa chỉ backend đặt trong `js/config.js`;
-không kết nối được backend thì trang tự dùng dữ liệu mẫu trong `js/mock-data.js`.
-
-Kiểm tra code frontend React: `npm run lint` (ESLint) và `npm run format` (Prettier định dạng lại `src`).
+Frontend (cổng 5500): mở thư mục `iot_thien_html_frontend` bằng VS Code,
+chuột phải `login.html` → **Open with Live Server**. Địa chỉ backend đặt trong `js/config.js`.
 
 Firmware: chép `secrets.example.h` thành `secrets.h` (cùng thư mục sketch), điền WiFi và MQTT,
 rồi nạp bằng Arduino IDE với board **NodeMCU 1.0 (ESP-12E Module)**.

@@ -1,4 +1,4 @@
-// Gọi API backend bằng fetch (tương ứng services/api.js + services/iotService.js)
+// Gọi API backend bằng fetch
 
 // Gửi request tới backend, tự gắn token. Lỗi mạng (backend tắt) thì đánh dấu isNetwork = true.
 async function request(method, path, { params, body } = {}) {

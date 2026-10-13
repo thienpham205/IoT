@@ -1,4 +1,4 @@
-// Trang Hồ sơ (tương ứng pages/ProfilePage.jsx)
+// Trang Hồ sơ
 
 initLayout()
 

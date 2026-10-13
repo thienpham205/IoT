@@ -1,4 +1,4 @@
-// Trang Đăng nhập (tương ứng pages/LoginPage.jsx)
+// Trang Đăng nhập
 
 // Đã đăng nhập rồi thì vào thẳng Trang chủ
 if (isAuthenticated()) location.replace('index.html')

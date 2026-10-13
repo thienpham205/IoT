@@ -1,4 +1,4 @@
-// Dữ liệu mẫu tĩnh, dùng khi không kết nối được backend (tương ứng services/mock/mockData.js)
+// Dữ liệu mẫu tĩnh, dùng khi không kết nối được backend
 
 const mockUser = {
   id: 1,

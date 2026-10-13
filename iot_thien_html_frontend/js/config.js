@@ -1,4 +1,4 @@
-// Cấu hình chung cho mọi trang (tương ứng constants.js + .env của bản React)
+// Cấu hình chung cho mọi trang
 
 // Địa chỉ backend
 const API_URL = 'http://localhost:3000/api'

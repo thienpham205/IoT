@@ -1,4 +1,4 @@
-// Hàm định dạng dùng chung (tương ứng utils/format.js)
+// Hàm định dạng dùng chung
 
 const pad = (n) => String(n).padStart(2, '0')
 

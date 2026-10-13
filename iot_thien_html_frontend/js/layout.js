@@ -1,4 +1,4 @@
-// Phần dùng chung của các trang sau đăng nhập (tương ứng Topbar.jsx).
+// Phần dùng chung của các trang sau đăng nhập.
 // Sidebar và topbar viết sẵn trong từng file .html; file này chỉ điền avatar + đồng hồ.
 
 function initLayout() {

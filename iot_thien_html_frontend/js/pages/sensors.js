@@ -1,4 +1,4 @@
-// Trang Cảm biến (tương ứng pages/SensorsPage.jsx)
+// Trang Cảm biến
 
 initLayout()
 

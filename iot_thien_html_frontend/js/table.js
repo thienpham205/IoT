@@ -1,5 +1,4 @@
 // Bảng dữ liệu có phân trang, dùng chung cho trang Cảm biến và Lịch sử hoạt động
-// (tương ứng hooks/usePagedData.js + components/common/DataTable.jsx + TablePagination.jsx)
 
 // Danh sách số trang hiển thị: luôn có trang đầu, trang cuối và 2 trang quanh trang hiện tại
 function pageItems(current, total) {

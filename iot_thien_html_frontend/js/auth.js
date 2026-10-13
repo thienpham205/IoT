@@ -1,4 +1,4 @@
-// Lưu / đọc thông tin đăng nhập trong localStorage (tương ứng services/auth.js)
+// Lưu / đọc thông tin đăng nhập trong localStorage
 
 const TOKEN_KEY = 'iot_thien_access_token'
 const USER_KEY = 'iot_thien_user'
@@ -30,7 +30,6 @@ function isAuthenticated() {
 }
 
 // Đặt ở đầu các trang cần đăng nhập: chưa có token thì chuyển về trang Đăng nhập
-// (tương ứng ProtectedLayout trong App.jsx)
 function requireLogin() {
   if (!isAuthenticated()) location.replace('login.html')
 }
