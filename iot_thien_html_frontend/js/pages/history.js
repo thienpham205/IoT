@@ -1,20 +1,14 @@
-// Trang Lịch sử hoạt động
+// Trang Lịch sử hoạt động - Dữ liệu động kết nối REST API
 
 initLayout()
 
-// Cột "Trạng thái": đang chờ ACK / thất bại / trạng thái ON-OFF đã xác nhận
-function actionStatus(row) {
-  if (row.result === 'PENDING') return '<span class="status-badge warn"><i></i>Đang chờ ACK</span>'
-  if (row.result === 'FAILED') return '<span class="status-badge bad"><i></i>Thất bại</span>'
-  return `<span class="status-badge ${row.action === 'ON' ? 'good' : 'neutral'}"><i></i>${row.action}</span>`
-}
-
-// Cột "Kết quả": nhãn tiếng Việt + màu
+// Cột "Trạng thái": Thành công / Thất bại / Đang chờ + màu badge
 const RESULTS = {
   SUCCESS: { label: 'Thành công', tone: 'good' },
   FAILED: { label: 'Thất bại', tone: 'bad' },
   PENDING: { label: 'Đang chờ', tone: 'warn' }
 }
+
 function resultBadge(result) {
   const { label, tone } = RESULTS[result] || { label: result, tone: 'neutral' }
   return `<span class="status-badge ${tone}"><i></i>${escapeHtml(label)}</span>`
@@ -26,30 +20,33 @@ const resultSelect = document.getElementById('result')
 const searchInput = document.getElementById('search')
 
 const table = createPagedTable({
-  // Ô tìm kiếm của trang này luôn tìm theo thời gian
-  fetchPage: (params) => getActionHistory({ ...params, searchField: 'time' }),
+  getPage: getActionPage,
   initialFilters: { deviceId: '', action: '', result: '', search: '' },
   tbody: document.getElementById('rows'),
   footer: document.getElementById('footer'),
-  errorBox: document.getElementById('error'),
-  columns: 7,
+  columns: 6,
   emptyText: 'Không có dữ liệu phù hợp.',
   renderRow: (row) => `
     <td class="technical-id">${row.historyId}</td>
-    <td><strong>${escapeHtml(row.deviceName)}</strong></td>
+    <td><strong>${escapeHtml(row.deviceName || 'Đèn')}</strong></td>
     <td>${row.action}</td>
-    <td>${actionStatus(row)}</td>
     <td>${resultBadge(row.result)}</td>
     <td>${formatTime(row.actionTime)}</td>
-    <td>${escapeHtml(row.userName)}</td>`
+    <td>${escapeHtml(row.userName || 'Phạm Minh Thiện')}</td>`
 })
 
-// Thêm các thiết bị vào ô lọc THIẾT BỊ; lỗi thì ô chỉ còn "Tất cả thiết bị"
-getDevices()
-  .then((devices) => {
-    for (const d of devices) deviceSelect.add(new Option(d.deviceName, d.deviceId))
-  })
-  .catch(() => {})
+// Nạp danh sách thiết bị động từ Backend vào ô lọc THIẾT BỊ
+async function populateDevices() {
+  try {
+    const devices = await getDevices()
+    for (const d of devices) {
+      deviceSelect.add(new Option(d.deviceName || 'Đèn', d.deviceId))
+    }
+  } catch (err) {
+    console.error('[history] populateDevices error:', err)
+  }
+}
+populateDevices()
 
 document.getElementById('filter-form').addEventListener('submit', (e) => {
   e.preventDefault()

@@ -29,7 +29,7 @@ Frontend không kết nối trực tiếp MQTT hay MySQL; mọi thao tác đi qu
 4. **Lịch sử hoạt động** – lọc theo thiết bị, hành động, trạng thái, thời gian; phân trang
 5. **Hồ sơ** – thông tin tài khoản, liên kết GitHub / Figma / Postman / báo cáo PDF
 
-Khi không kết nối được backend, frontend tự chuyển sang dữ liệu mẫu (`iot_thien_html_frontend/js/mock-data.js`).
+Frontend lấy toàn bộ dữ liệu từ backend qua REST API (các hàm gọi API nằm trong `iot_thien_html_frontend/js/data.js`).
 
 ## Chạy local
 
@@ -49,7 +49,7 @@ npm run dev
 ```
 
 Frontend (cổng 5500): mở thư mục `iot_thien_html_frontend` bằng VS Code,
-chuột phải `login.html` → **Open with Live Server**. Địa chỉ backend đặt trong `js/config.js`.
+chuột phải `login.html` → **Open with Live Server**. Cần chạy backend trước; địa chỉ backend đặt trong `js/config.js`.
 
 Firmware: chép `secrets.example.h` thành `secrets.h` (cùng thư mục sketch), điền WiFi và MQTT,
 rồi nạp bằng Arduino IDE với board **NodeMCU 1.0 (ESP-12E Module)**.

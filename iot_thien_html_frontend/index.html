@@ -1,96 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Trang chủ · IoT_ThienPM</title>
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <div class="app-shell">
-      <!-- Sidebar: mục đang mở có class "active" -->
-      <aside class="sidebar">
-        <div class="brand">IoT_ThienPM</div>
-        <nav class="sidebar-nav">
-          <a class="side-link active" href="index.html">Trang chủ</a>
-          <a class="side-link" href="sensors.html">Cảm biến</a>
-          <a class="side-link" href="history.html">Lịch sử hoạt động</a>
-          <a class="side-link" href="profile.html">Hồ sơ</a>
-        </nav>
-      </aside>
-
-      <main class="app-main">
-        <header class="topbar">
-          <span class="topbar-brand">IoT_ThienPM</span>
-          <div class="topbar-actions">
-            <a class="top-pill" href="profile.html"><span class="mini-avatar"></span>Hồ sơ</a>
-            <div class="top-pill" id="clock"></div>
-          </div>
-        </header>
-
-        <div class="page">
-          <div class="page-header">
-            <div>
-              <h1>Trang chủ</h1>
-              <p>Theo dõi dữ liệu cảm biến theo thời gian thực và điều khiển thiết bị</p>
-            </div>
-          </div>
-
-          <div class="page-error" id="error" hidden></div>
-
-          <!-- 3 thẻ số liệu -->
-          <div class="metric-grid">
-            <div class="card stat-card">
-              <div class="stat-title">Nhiệt độ</div>
-              <div class="stat-value" id="stat-temperature">--</div>
-            </div>
-            <div class="card stat-card">
-              <div class="stat-title">Độ ẩm</div>
-              <div class="stat-value" id="stat-humidity">--</div>
-            </div>
-            <div class="card stat-card">
-              <div class="stat-title">Độ sáng</div>
-              <div class="stat-value" id="stat-light">--</div>
-            </div>
-          </div>
-
-          <div class="dashboard-layout">
-            <section class="card chart-card">
-              <div class="card-heading">
-                <div>
-                  <h3>Biểu đồ thời gian thực</h3>
-                  <p>Nhiệt độ, độ ẩm và ánh sáng trên cùng mốc thời gian</p>
-                </div>
-              </div>
-              <div class="chart-area">
-                <div class="loading-block" id="chart-loading">Đang tải biểu đồ...</div>
-                <canvas id="chart" hidden></canvas>
-              </div>
-            </section>
-
-            <section class="card control-card">
-              <div class="card-heading">
-                <div>
-                  <h3>Điều khiển thiết bị</h3>
-                  <p>Đèn</p>
-                </div>
-              </div>
-              <div class="inline-error" id="control-error" hidden></div>
-              <!-- Các thẻ đèn được vẽ bằng JavaScript (js/pages/dashboard.js) -->
-              <div class="device-list" id="device-list"></div>
-            </section>
-          </div>
-        </div>
-      </main>
-    </div>
-
-    <script src="js/vendor/chart.umd.js"></script>
-    <script src="js/config.js"></script>
-    <script src="js/format.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/mock-data.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/layout.js"></script>
-    <script src="js/pages/dashboard.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=login.html">
+  <title>Đang chuyển hướng...</title>
+  <script>
+    const token = localStorage.getItem('iot_thien_token');
+    if (token) {
+      location.replace('dashboard.html');
+    } else {
+      location.replace('login.html');
+    }
+  </script>
+</head>
+<body>
+  <p>Đang chuyển hướng tới hệ thống IoT...</p>
+</body>
 </html>

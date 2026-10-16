@@ -1,14 +1,15 @@
 // Trang Đăng nhập
 
 // Đã đăng nhập rồi thì vào thẳng Trang chủ
-if (isAuthenticated()) location.replace('index.html')
+if (isLoggedIn()) {
+  location.replace('dashboard.html')
+}
 
-const form = document.getElementById('login-form')
 const usernameInput = document.getElementById('username')
 const passwordInput = document.getElementById('password')
 const toggleButton = document.getElementById('toggle-password')
-const submitButton = document.getElementById('submit')
 const errorBox = document.getElementById('error')
+const submitBtn = document.getElementById('submit')
 
 // Điền sẵn tài khoản demo
 usernameInput.value = DEMO_ACCOUNT.username
@@ -24,20 +25,24 @@ toggleButton.addEventListener('click', () => {
   toggleButton.textContent = showing ? 'Hiện' : 'Ẩn'
 })
 
-// Gửi form: bấm nút hoặc nhấn Enter
-form.addEventListener('submit', async (e) => {
-  e.preventDefault() // không cho trình duyệt tải lại trang
+// Gửi form đăng nhập qua API backend
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault()
   showError(errorBox, '')
-  submitButton.disabled = true
-  submitButton.textContent = 'Đang xác thực...'
+  submitBtn.disabled = true
+  submitBtn.textContent = 'Đang đăng nhập...'
+
   try {
-    const data = await login(usernameInput.value, passwordInput.value)
-    setAuth(data.accessToken, data.user)
-    location.href = 'index.html'
+    const res = await login(usernameInput.value.trim(), passwordInput.value)
+    if (res.success) {
+      location.href = 'dashboard.html'
+    } else {
+      showError(errorBox, res.message || 'Tên đăng nhập hoặc mật khẩu không đúng')
+    }
   } catch (err) {
-    showError(errorBox, err.message || 'Đăng nhập thất bại.')
+    showError(errorBox, err.message || 'Lỗi kết nối máy chủ')
   } finally {
-    submitButton.disabled = false
-    submitButton.textContent = 'Đăng nhập'
+    submitBtn.disabled = false
+    submitBtn.textContent = 'Đăng nhập'
   }
 })

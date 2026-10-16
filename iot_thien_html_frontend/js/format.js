@@ -2,11 +2,11 @@
 
 const pad = (n) => String(n).padStart(2, '0')
 
-// dd/MM/yyyy HH:mm:ss - trùng định dạng dùng khi tìm kiếm theo thời gian
+// yyyy-MM-dd HH:mm:ss (năm-tháng-ngày giờ:phút:giây) - trùng định dạng dùng khi tìm kiếm theo thời gian
 function formatTime(value) {
   if (!value) return '--'
   const d = new Date(value)
-  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
 }
 
 // HH:mm (24 giờ) - đồng hồ trên thanh trên cùng

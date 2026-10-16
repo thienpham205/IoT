@@ -1,143 +1,162 @@
-// Trang chủ
+// Trang chủ - Dữ liệu động kết nối REST API (1 đèn duy nhất)
 
 initLayout()
 
-// ---------- Biểu đồ ----------
-// Đường thẳng nối các điểm, không bo cong, không vẽ chấm (chấm chỉ hiện khi rê chuột)
-const LINE_STYLE = { tension: 0, borderWidth: 2, pointRadius: 0, pointHoverRadius: 4 }
-
-const chart = new Chart(document.getElementById('chart'), {
-  type: 'line',
-  data: {
-    labels: [],
-    datasets: [
-      { ...LINE_STYLE, label: 'Nhiệt độ (°C)', data: [], borderColor: '#6847ff', backgroundColor: '#6847ff', yAxisID: 'yTemp' },
-      { ...LINE_STYLE, label: 'Độ ẩm (%)', data: [], borderColor: '#20b9b0', backgroundColor: '#20b9b0', yAxisID: 'yHum' },
-      { ...LINE_STYLE, label: 'Độ sáng (lux)', data: [], borderColor: '#f3a11a', backgroundColor: '#f3a11a', yAxisID: 'yLight' }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: false,
-    interaction: { intersect: false, mode: 'index' },
-    plugins: {
-      legend: {
-        position: 'top',
-        align: 'end',
-        labels: { usePointStyle: true, pointStyle: 'line', boxWidth: 20, font: { size: 11 } }
-      },
-      tooltip: { padding: 12 }
-    },
-    scales: {
-      x: { grid: { display: false }, ticks: { color: '#8a96ad', font: { size: 10 } } },
-      yTemp: { position: 'left', suggestedMin: 15, suggestedMax: 35, grid: { color: '#edf1f7' }, ticks: { color: '#6847ff', stepSize: 5 } },
-      yHum: { position: 'right', suggestedMin: 40, suggestedMax: 90, grid: { drawOnChartArea: false }, ticks: { color: '#20b9b0', stepSize: 10 } },
-      yLight: { position: 'right', suggestedMin: 0, suggestedMax: 600, grid: { drawOnChartArea: false }, ticks: { color: '#f3a11a', stepSize: 100 } }
-    }
-  }
-})
-
-function renderChart(data) {
-  document.getElementById('chart-loading').hidden = true
-  document.getElementById('chart').hidden = false
-  chart.data.labels = data.labels
-  chart.data.datasets[0].data = data.series.temperature
-  chart.data.datasets[1].data = data.series.humidity
-  chart.data.datasets[2].data = data.series.light
-  chart.update()
-}
-
 // ---------- 3 thẻ số liệu ----------
-function renderStats(latest) {
-  document.getElementById('stat-temperature').textContent = `${latest.temperature}°C`
-  document.getElementById('stat-humidity').textContent = `${latest.humidity}%`
-  document.getElementById('stat-light').textContent = `${latest.light} lux`
-}
-
-// ---------- Điều khiển đèn ----------
-// Chữ + màu badge theo trạng thái đèn
-const STATUS_LABELS = {
-  ON: { text: 'Đang bật', tone: 'bad' }, // đỏ
-  OFF: { text: 'Đang tắt', tone: 'good' } // xanh
-}
-
-let devices = []
-let pending = null // lệnh đang gửi: { deviceId, action } hoặc null
-
-function statusBadge(device) {
-  if (pending && pending.deviceId === device.deviceId) {
-    return `<span class="status-badge warn"><i></i>${pending.action === 'ON' ? 'Đang bật...' : 'Đang tắt...'}</span>`
+async function loadLatestSensor() {
+  try {
+    const latest = await getLatestSensor()
+    if (latest) {
+      document.getElementById('stat-temperature').textContent = `${latest.temperature}°C`
+      document.getElementById('stat-humidity').textContent = `${latest.humidity}%`
+      document.getElementById('stat-light').textContent = `${latest.light} lux`
+    }
+  } catch (err) {
+    console.error('[dashboard] loadLatestSensor error:', err)
   }
-  const { text, tone } = STATUS_LABELS[device.status] || { text: 'Không rõ', tone: 'neutral' }
-  return `<span class="status-badge ${tone}"><i></i>${text}</span>`
+}
+
+// ---------- Biểu đồ thời gian thực ----------
+const LINE_STYLE = { tension: 0, borderWidth: 2, pointRadius: 0, pointHoverRadius: 4 }
+let chartInstance = null
+
+function initChart(labels = [], series = {}) {
+  const canvas = document.getElementById('chart')
+  chartInstance = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        { ...LINE_STYLE, label: 'Nhiệt độ (°C)', data: series.temperature || [], borderColor: '#6847ff', backgroundColor: '#6847ff', yAxisID: 'yTemp' },
+        { ...LINE_STYLE, label: 'Độ ẩm (%)', data: series.humidity || [], borderColor: '#20b9b0', backgroundColor: '#20b9b0', yAxisID: 'yHum' },
+        { ...LINE_STYLE, label: 'Độ sáng (lux)', data: series.light || [], borderColor: '#f3a11a', backgroundColor: '#f3a11a', yAxisID: 'yLight' }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: {
+          position: 'top',
+          align: 'end',
+          labels: { usePointStyle: true, pointStyle: 'line', boxWidth: 20, font: { size: 11 } }
+        },
+        tooltip: { padding: 12 }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#8a96ad', font: { size: 10 } } },
+        yTemp: { position: 'left', suggestedMin: 15, suggestedMax: 35, grid: { color: '#edf1f7' }, ticks: { color: '#6847ff', stepSize: 5 } },
+        yHum: { position: 'right', suggestedMin: 40, suggestedMax: 90, grid: { drawOnChartArea: false }, ticks: { color: '#20b9b0', stepSize: 10 } },
+        yLight: { position: 'right', suggestedMin: 0, suggestedMax: 600, grid: { drawOnChartArea: false }, ticks: { color: '#f3a11a', stepSize: 100 } }
+      }
+    }
+  })
+}
+
+async function loadChart() {
+  try {
+    const res = await getChartData(CHART_POINTS)
+    const labels = res.labels || []
+    const series = res.series || {}
+    if (!chartInstance) {
+      initChart(labels, series)
+    } else {
+      chartInstance.data.labels = labels
+      chartInstance.data.datasets[0].data = series.temperature || []
+      chartInstance.data.datasets[1].data = series.humidity || []
+      chartInstance.data.datasets[2].data = series.light || []
+      chartInstance.update()
+    }
+  } catch (err) {
+    console.error('[dashboard] loadChart error:', err)
+  }
+}
+
+// ---------- Điều khiển đèn (Chỉ 1 đèn duy nhất - LIGHT_01) ----------
+let currentDevices = []
+let isControlling = false
+
+async function loadDevices() {
+  try {
+    const devices = await getDevices()
+    // Chỉ lấy 1 đèn (Đèn 1) khớp với phần cứng thật ESP8266 và báo cáo
+    currentDevices = devices.slice(0, 1)
+    renderDevices()
+  } catch (err) {
+    console.error('[dashboard] loadDevices error:', err)
+  }
 }
 
 function renderDevices() {
-  document.getElementById('device-list').innerHTML = devices
+  const container = document.getElementById('device-list')
+  if (!currentDevices.length) {
+    container.innerHTML = `
+      <div class="device-card">
+        <div class="device-copy">
+          <strong>Đèn</strong>
+        </div>
+        <div class="device-status">Đang tải...</div>
+      </div>`
+    return
+  }
+
+  container.innerHTML = currentDevices
     .map((device) => {
-      const locked = pending && pending.deviceId === device.deviceId ? 'disabled' : ''
-      const buttons = ['ON', 'OFF']
-        .map((action) => `<button class="mode-button ${device.status === action ? 'active' : ''}"
-          data-id="${device.deviceId}" data-action="${action}" ${locked}>${action}</button>`)
-        .join('')
+      const isOn = device.status === 'ON'
       return `
         <div class="device-card">
           <div class="device-copy">
-            <strong>${escapeHtml(device.deviceName)}</strong>
-            <span>${escapeHtml(device.location)}</span>
+            <strong>${escapeHtml(device.deviceName || 'Đèn')}</strong>
           </div>
-          <div class="device-status"><span>Trạng thái:</span>${statusBadge(device)}</div>
-          <div class="device-actions">${buttons}</div>
+          <div class="device-status">${isOn ? 'Đang bật' : 'Đang tắt'}</div>
+          <div class="device-actions">
+            <button class="mode-button on ${isOn ? 'active' : ''}"
+              data-id="${device.deviceId}" data-action="ON" ${isControlling ? 'disabled' : ''}>ON</button>
+            <button class="mode-button off ${!isOn ? 'active' : ''}"
+              data-id="${device.deviceId}" data-action="OFF" ${isControlling ? 'disabled' : ''}>OFF</button>
+          </div>
         </div>`
     })
     .join('')
 }
 
-// Bấm ON / OFF (một trình nghe cho cả danh sách, vì các nút được vẽ lại liên tục)
+// Bấm nút ON / OFF điều khiển đèn qua REST API
 document.getElementById('device-list').addEventListener('click', async (e) => {
   const btn = e.target.closest('button[data-action]')
-  if (!btn || btn.disabled) return
+  if (!btn || isControlling) return
   const deviceId = Number(btn.dataset.id)
   const action = btn.dataset.action
-  const errorBox = document.getElementById('control-error')
 
-  showError(errorBox, '')
-  pending = { deviceId, action }
-  renderDevices()
+  isControlling = true
+  const target = currentDevices.find((d) => d.deviceId === deviceId)
+  if (target) {
+    target.status = action
+    renderDevices()
+  }
+
   try {
-    const result = await controlDevice(deviceId, { action, mode: 'MANUAL' })
-    if (result && result.result === 'FAILED') {
-      showError(errorBox, result.message || 'Không nhận được ACK từ thiết bị trong thời gian chờ.')
-    } else {
-      // Cập nhật ngay trạng thái đèn vừa điều khiển, không chờ lần tải kế tiếp
-      devices = devices.map((d) => (d.deviceId === deviceId ? { ...d, status: result.status } : d))
-    }
+    const res = await setDeviceStatus(deviceId, action)
+    await loadDevices()
+    if (res.result !== 'SUCCESS') alert(`Điều khiển thất bại: ${res.message || 'Thiết bị không phản hồi'}`)
   } catch (err) {
-    showError(errorBox, err.message || 'Điều khiển thất bại.')
+    console.error('[dashboard] control failed:', err)
+    alert(`Lỗi điều khiển thiết bị: ${err.message}`)
+    await loadDevices()
   } finally {
-    pending = null
+    isControlling = false
     renderDevices()
   }
 })
 
-// ---------- Tải dữ liệu mỗi REFRESH_MS ----------
-async function load() {
-  try {
-    const [latest, chartData, deviceData] = await Promise.all([
-      getLatestSensor(),
-      getChart({ sensorCode: SENSOR_CODE, points: CHART_POINTS }),
-      getDevices()
-    ])
-    showError(document.getElementById('error'), '')
-    renderStats(latest)
-    renderChart(chartData)
-    devices = deviceData
-    renderDevices()
-  } catch (err) {
-    showError(document.getElementById('error'), err.message || 'Không tải được Dashboard.')
-  }
+// Khởi chạy dữ liệu và chu kỳ làm mới tự động (realtime 5s)
+async function initDashboard() {
+  await Promise.all([loadLatestSensor(), loadChart(), loadDevices()])
+  setInterval(() => {
+    loadLatestSensor()
+    loadChart()
+  }, 5000)
 }
 
-load()
-setInterval(load, REFRESH_MS)
+initDashboard()

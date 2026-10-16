@@ -2,35 +2,23 @@
 
 initLayout()
 
-// Tên hiển thị theo loại cảm biến (backend trả "Cảm biến ..." nên đổi lại cho ngắn)
+// Tên hiển thị theo loại cảm biến
 const SENSOR_NAMES = { temperature: 'Nhiệt độ', humidity: 'Độ ẩm', light: 'Ánh sáng' }
 
 const typeSelect = document.getElementById('type')
 const searchInput = document.getElementById('search')
 
-// Đổi bộ lọc trên giao diện sang tham số API /sensor-data.
-// "time" không phải loại cảm biến: chọn nó để ô bên cạnh tìm theo thời gian.
-function fetchSensorPage({ type, search, ...rest }) {
-  const byTime = type === 'time'
-  return getSensorHistory({
-    ...rest,
-    search,
-    type: byTime ? '' : type,
-    searchField: byTime ? 'time' : search ? 'value' : 'all'
-  })
-}
-
+// "Thời gian" không phải loại cảm biến: chọn nó để ô bên cạnh tìm theo thời gian (xem getSensorPage)
 const table = createPagedTable({
-  fetchPage: fetchSensorPage,
-  initialFilters: { type: '', search: '', sort: 'recordedAt,desc' },
+  getPage: getSensorPage,
+  initialFilters: { type: '', search: '' },
   tbody: document.getElementById('rows'),
   footer: document.getElementById('footer'),
-  errorBox: document.getElementById('error'),
   columns: 4,
   emptyText: 'Không có bản ghi phù hợp.',
   renderRow: (row) => `
     <td class="technical-id">${row.dataId}</td>
-    <td>${SENSOR_NAMES[row.sensorType] || escapeHtml(row.sensorName)}</td>
+    <td>${SENSOR_NAMES[row.sensorType]}</td>
     <td>${row.value} ${row.unit}</td>
     <td>${formatTime(row.recordedAt)}</td>`
 })
@@ -40,7 +28,7 @@ function updateLabels() {
   const byTime = typeSelect.value === 'time'
   document.getElementById('type-label').textContent = byTime ? 'TÌM THEO' : 'LOẠI CẢM BIẾN'
   document.getElementById('search-label').textContent = byTime ? 'THỜI GIAN' : 'GIÁ TRỊ'
-  searchInput.placeholder = byTime ? 'Nhập thời gian (VD: 07/10/2026 hoặc 10:30)...' : 'Nhập giá trị cần tìm...'
+  searchInput.placeholder = byTime ? 'Nhập thời gian (VD: 2026-10-07 hoặc 10:30)...' : 'Nhập giá trị cần tìm...'
 }
 typeSelect.addEventListener('change', updateLabels)
 

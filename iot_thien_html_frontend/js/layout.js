@@ -15,7 +15,7 @@ function initLayout() {
   setInterval(tick, 30000)
 }
 
-// Hiện / ẩn khung lỗi đỏ (class page-error hoặc inline-error)
+// Hiện / ẩn khung lỗi đỏ (class form-error ở trang Đăng nhập)
 function showError(element, message) {
   element.textContent = message || ''
   element.hidden = !message

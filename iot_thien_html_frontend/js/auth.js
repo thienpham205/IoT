@@ -1,14 +1,27 @@
-// Lưu / đọc thông tin đăng nhập trong localStorage
+// Đăng nhập / đăng xuất: lưu JWT token và thông tin người dùng trong localStorage
 
-const TOKEN_KEY = 'iot_thien_access_token'
+const TOKEN_KEY = 'iot_thien_token'
 const USER_KEY = 'iot_thien_user'
 
-function setAuth(accessToken, user) {
-  localStorage.setItem(TOKEN_KEY, accessToken)
-  localStorage.setItem(USER_KEY, JSON.stringify(user))
+// Đăng nhập qua REST API của Backend
+async function login(username, password) {
+  try {
+    const res = await apiFetch('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password })
+    })
+    if (res.accessToken) {
+      localStorage.setItem(TOKEN_KEY, res.accessToken)
+      localStorage.setItem(USER_KEY, JSON.stringify(res.user))
+      return { success: true, user: res.user }
+    }
+    return { success: false, message: 'Không nhận được mã xác thực token' }
+  } catch (err) {
+    return { success: false, message: err.message || 'Tên đăng nhập hoặc mật khẩu không đúng' }
+  }
 }
 
-function clearAuth() {
+function logout() {
   localStorage.removeItem(TOKEN_KEY)
   localStorage.removeItem(USER_KEY)
 }
@@ -25,11 +38,13 @@ function getUser() {
   }
 }
 
-function isAuthenticated() {
+function isLoggedIn() {
   return Boolean(getToken())
 }
 
-// Đặt ở đầu các trang cần đăng nhập: chưa có token thì chuyển về trang Đăng nhập
+// Đặt ở đầu các trang cần đăng nhập: chưa đăng nhập thì chuyển về trang Đăng nhập
 function requireLogin() {
-  if (!isAuthenticated()) location.replace('login.html')
+  if (!isLoggedIn()) {
+    location.replace('login.html')
+  }
 }

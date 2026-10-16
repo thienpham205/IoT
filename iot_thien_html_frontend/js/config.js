@@ -1,17 +1,52 @@
 // Cấu hình chung cho mọi trang
 
-// Địa chỉ backend
-const API_URL = 'http://localhost:3000/api'
+// Địa chỉ Backend REST API
+const API_BASE_URL = 'http://localhost:3000/api'
 
-// Mã cảm biến của node ESP8266
-const SENSOR_CODE = 'SENSOR_01'
-
-// Tài khoản demo: điền sẵn ở trang Đăng nhập và dùng khi chạy chế độ mock
+// Tài khoản đăng nhập demo (điền sẵn ở trang Đăng nhập)
 const DEMO_ACCOUNT = { username: 'phamminhthien', password: '123456' }
 
-// Trang chủ tải lại số liệu mỗi 2 giây; biểu đồ lấy 20 lần đo gần nhất
-const REFRESH_MS = 2000
+// Biểu đồ Trang chủ hiển thị 20 mốc gần nhất
 const CHART_POINTS = 20
 
 // Các lựa chọn số dòng mỗi trang của bảng
 const PAGE_SIZES = [5, 10, 20]
+
+// Hàm gọi API dùng chung kết nối với Backend
+async function apiFetch(endpoint, options = {}) {
+  const url = endpoint.startsWith('http')
+    ? endpoint
+    : `${API_BASE_URL}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`
+  const token = localStorage.getItem('iot_thien_token')
+
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(options.headers || {})
+  }
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
+  const response = await fetch(url, {
+    ...options,
+    headers
+  })
+
+  const data = await response.json().catch(() => ({}))
+
+  // 401 khi đã có token: token hết hạn/không hợp lệ -> xoá phiên và về trang Đăng nhập.
+  // 401 khi chưa có token (đang đăng nhập sai) thì giữ nguyên trang, hiện thông báo của Backend.
+  if (response.status === 401 && token) {
+    localStorage.removeItem('iot_thien_token')
+    localStorage.removeItem('iot_thien_user')
+    location.replace('login.html')
+    throw new Error('Hết phiên đăng nhập, vui lòng đăng nhập lại')
+  }
+
+  if (!response.ok) {
+    const errorMsg = data?.message || `Lỗi yêu cầu máy chủ (${response.status})`
+    throw new Error(errorMsg)
+  }
+
+  return data
+}

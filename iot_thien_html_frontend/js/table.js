@@ -1,4 +1,4 @@
-// Bảng dữ liệu có phân trang, dùng chung cho trang Cảm biến và Lịch sử hoạt động
+// Bảng dữ liệu có phân trang động, dùng chung cho trang Cảm biến và Lịch sử hoạt động
 
 // Danh sách số trang hiển thị: luôn có trang đầu, trang cuối và 2 trang quanh trang hiện tại
 function pageItems(current, total) {
@@ -40,42 +40,35 @@ function renderPagination(footer, data) {
     </div>`
 }
 
-// Tạo một bảng có phân trang.
-//   fetchPage(params)   : hàm lấy dữ liệu, trả { content, page, size, totalElements, totalPages }
+// Tạo một bảng có phân trang bất đồng bộ kết nối REST API.
+//   getPage(params)     : hàm gọi API (async), trả { content, page, size, totalElements, totalPages }
 //   initialFilters      : bộ lọc ban đầu
 //   tbody, footer       : thẻ <tbody> và <div class="table-footer"> trên trang
-//   errorBox            : khung báo lỗi
-//   columns             : số cột (cho dòng "đang tải" / "không có dữ liệu")
+//   columns             : số cột (cho dòng "không có dữ liệu")
 //   renderRow(row)      : trả về chuỗi HTML các ô <td> của một dòng
 //   emptyText           : chữ khi không có dòng nào
-// Trả về { applyFilters, reload }.
-function createPagedTable({ fetchPage, initialFilters, tbody, footer, errorBox, columns, renderRow, emptyText }) {
+// Trả về { applyFilters, refresh }.
+function createPagedTable({ getPage, initialFilters, tbody, footer, columns, renderRow, emptyText }) {
   let params = { page: 0, size: 10, ...initialFilters }
-  let data = { content: [], page: 0, size: 10, totalElements: 0, totalPages: 1 }
-  let requestId = 0 // bỏ qua kết quả của lần tải cũ nếu đã có lần tải mới hơn
+  let loading = false
 
-  const fullWidthRow = (text) => `<tr><td colspan="${columns}" class="table-empty">${text}</td></tr>`
-
-  function renderBody(loading) {
-    if (loading) tbody.innerHTML = fullWidthRow('Đang tải dữ liệu...')
-    else if (!data.content.length) tbody.innerHTML = fullWidthRow(emptyText)
-    else tbody.innerHTML = data.content.map((row) => `<tr>${renderRow(row)}</tr>`).join('')
-    renderPagination(footer, data)
-  }
-
-  async function load() {
-    const id = ++requestId
-    renderBody(true)
+  async function render() {
+    if (loading) return
+    loading = true
+    tbody.innerHTML = `<tr><td colspan="${columns}" class="table-empty">Đang tải dữ liệu từ máy chủ...</td></tr>`
     try {
-      const result = await fetchPage(params)
-      if (id !== requestId) return
-      data = result
-      showError(errorBox, '')
+      const data = await getPage(params)
+      const list = data?.content || []
+      tbody.innerHTML = list.length
+        ? list.map((row) => `<tr>${renderRow(row)}</tr>`).join('')
+        : `<tr><td colspan="${columns}" class="table-empty">${emptyText}</td></tr>`
+      renderPagination(footer, data || { page: 0, size: params.size, totalElements: 0, totalPages: 0 })
     } catch (err) {
-      if (id !== requestId) return
-      showError(errorBox, err.message || 'Không tải được dữ liệu.')
+      console.error('[table] load error:', err)
+      tbody.innerHTML = `<tr><td colspan="${columns}" class="table-empty" style="color: #ea3943;">Không thể tải dữ liệu: ${err.message || 'Lỗi kết nối máy chủ'}</td></tr>`
+    } finally {
+      loading = false
     }
-    renderBody(false)
   }
 
   // Bấm nút trang / đổi số dòng mỗi trang
@@ -83,21 +76,22 @@ function createPagedTable({ fetchPage, initialFilters, tbody, footer, errorBox, 
     const btn = e.target.closest('button[data-page]')
     if (!btn || btn.disabled) return
     params = { ...params, page: Number(btn.dataset.page) }
-    load()
+    render()
   })
   footer.addEventListener('change', (e) => {
     if (e.target.dataset.role !== 'size') return
     params = { ...params, size: Number(e.target.value), page: 0 }
-    load()
+    render()
   })
 
-  load()
+  render()
   return {
-    // Áp bộ lọc mới và quay về trang đầu
     applyFilters(filters) {
       params = { ...params, ...filters, page: 0 }
-      load()
+      render()
     },
-    reload: load
+    refresh() {
+      render()
+    }
   }
 }

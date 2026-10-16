@@ -41,31 +41,38 @@ router.post('/devices/:deviceId/control', requireAuth, async (req, res) => {
   const requestedMode = mode === 'AUTO' ? 'AUTO' : 'MANUAL'
   const now = new Date()
 
-  // Cập nhật trạng thái thiết bị và ghi lịch sử (phục vụ test FE không cần chờ phần cứng)
+  // Ghi lịch sử với trạng thái PENDING, publish lệnh xuống ESP8266 rồi chờ ACK (luồng UC04):
+  // có ACK -> mqttClient cập nhật devices + action_history = SUCCESS;
+  // hết CONTROL_ACK_TIMEOUT_MS không có ACK -> action_history = FAILED, trạng thái đèn giữ nguyên.
   await pool.query(
-    'UPDATE devices SET status = ?, mode = ?, last_seen = ?, updated_at = ? WHERE device_id = ?',
-    [action, requestedMode, now, now, device.device_id]
+    `INSERT INTO action_history (action_code, device_id, user_id, action, requested_state, result, area, action_time)
+     VALUES (?, ?, ?, ?, ?, 'PENDING', ?, ?)`,
+    [actionCode, device.device_id, req.user.userId, action, action, device.location, now]
   )
 
-  await pool.query(
-    `INSERT INTO action_history (action_code, device_id, user_id, action, requested_state, result, area, action_time, confirmed_at)
-     VALUES (?, ?, ?, ?, ?, 'SUCCESS', ?, ?, ?)`,
-    [actionCode, device.device_id, req.user.userId, action, action, device.location, now, now]
-  )
-
-  // Vẫn publish lệnh xuống MQTT nếu có mạch thật kết nối
   try {
-    publishCommand({ actionCode, deviceCode: device.device_code, action, mode: requestedMode }).catch(() => {})
-  } catch {}
-
-  return res.json({
-    actionCode,
-    deviceId: device.device_id,
-    status: action,
-    mode: requestedMode,
-    result: 'SUCCESS',
-    confirmedAt: now.toISOString()
-  })
+    const ack = await publishCommand({ actionCode, deviceCode: device.device_code, action, mode: requestedMode })
+    await pool.query('UPDATE devices SET mode = ? WHERE device_id = ?', [requestedMode, device.device_id])
+    return res.json({
+      actionCode,
+      deviceId: device.device_id,
+      status: ack.status,
+      mode: requestedMode,
+      result: 'SUCCESS',
+      confirmedAt: ack.confirmedAt
+    })
+  } catch (err) {
+    // Lỗi publish (mất kết nối Broker) thì timeout chưa kịp ghi FAILED, nên ghi ở đây
+    await pool.query("UPDATE action_history SET result = 'FAILED' WHERE action_code = ?", [actionCode])
+    return res.json({
+      actionCode,
+      deviceId: device.device_id,
+      status: device.status,
+      mode: device.mode,
+      result: 'FAILED',
+      message: err.message === 'ACK_TIMEOUT' ? 'Thiết bị không phản hồi' : 'Không gửi được lệnh tới MQTT Broker'
+    })
+  }
 })
 
 export default router

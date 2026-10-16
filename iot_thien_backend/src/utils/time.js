@@ -20,9 +20,17 @@ export function timeSearchCondition(column, search) {
   })
   const join = (parts) => ({ sql: `(${parts.sql.join(' AND ')})`, params: parts.params })
 
-  const date = search.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/)
-  if (date) {
-    const [, day, month, year, h, m, s] = date
+  // Hỗ trợ DD/MM/YYYY hoặc YYYY-MM-DD (hoặc dấu - hay /)
+  const dateDMY = search.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/)
+  const dateYMD = search.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/)
+  
+  if (dateDMY || dateYMD) {
+    let year, month, day, h, m, s
+    if (dateDMY) {
+      [, day, month, year, h, m, s] = dateDMY
+    } else {
+      [, year, month, day, h, m, s] = dateYMD
+    }
     const sql = [`DATE(${time}) = ?`]
     const params = [`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`]
     if (h !== undefined) {
