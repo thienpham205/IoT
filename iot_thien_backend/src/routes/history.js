@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { pool } from '../db.js'
 import { requireAuth } from '../middleware/auth.js'
+import { asyncRoute } from '../utils/asyncRoute.js'
 import { parsePagination, buildPageResponse } from '../utils/pagination.js'
 import { whereClause } from '../utils/sql.js'
 import { timeSearchCondition } from '../utils/time.js'
@@ -56,7 +57,7 @@ function searchCondition(search, searchField) {
 
 // Danh sách lịch sử điều khiển.
 // Query: search, searchField, deviceId, action, result, from, to, page, size
-router.get('/action-history', requireAuth, async (req, res) => {
+router.get('/action-history', requireAuth, asyncRoute(async (req, res) => {
   const { page, size, offset } = parsePagination(req.query)
   const { deviceId, action, result, from, to, searchField = 'all' } = req.query
   const search = String(req.query.search || '').trim()
@@ -93,12 +94,12 @@ router.get('/action-history', requireAuth, async (req, res) => {
   )
 
   res.json(buildPageResponse({ content: rows.map(toHistoryDto), page, size, totalElements: total }))
-})
+}))
 
-router.get('/action-history/:historyId', requireAuth, async (req, res) => {
+router.get('/action-history/:historyId', requireAuth, asyncRoute(async (req, res) => {
   const [[row]] = await pool.query(`${HISTORY_COLUMNS} ${HISTORY_FROM} WHERE ah.history_id = ?`, [req.params.historyId])
   if (!row) return res.status(404).json({ message: 'Không tìm thấy bản ghi' })
   res.json(toHistoryDto(row))
-})
+}))
 
 export default router

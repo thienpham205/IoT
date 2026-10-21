@@ -98,7 +98,7 @@ async function handleSensorData(raw) {
 async function handleDeviceStatus(topic, raw) {
   const payload = JSON.parse(raw)
   const deviceCodeFromTopic = topic.split('/')[2]
-  const { actionCode, deviceCode = deviceCodeFromTopic, status } = payload
+  const { actionCode, deviceCode = deviceCodeFromTopic, status, result } = payload
 
   if (!['ON', 'OFF'].includes(status)) {
     console.warn('[mqtt] invalid device status payload, ignored:', raw)
@@ -123,6 +123,11 @@ async function handleDeviceStatus(topic, raw) {
   if (pending && pending.deviceCode === deviceCode) {
     clearTimeout(pending.timer)
     pendingActions.delete(actionCode)
+    // Mạch gửi result = REJECTED khi không thực hiện được lệnh -> route ghi FAILED
+    if (result && result !== 'SUCCESS') {
+      pending.reject(new Error('REJECTED'))
+      return
+    }
     await pool.query('UPDATE action_history SET result = ?, confirmed_at = ? WHERE action_code = ?', [
       'SUCCESS',
       now,
@@ -143,6 +148,12 @@ export function publishCommand({ actionCode, deviceCode, action, mode }) {
     mode,
     requestedAt: new Date().toISOString()
   })
+
+  // Đang mất kết nối Broker thì báo lỗi ngay; nếu không, thư viện mqtt sẽ xếp hàng lệnh
+  // và gửi muộn khi kết nối lại (đèn tự đổi trạng thái dù người dùng đã thấy "Thất bại")
+  if (!client || !client.connected) {
+    return Promise.reject(new Error('MQTT_DISCONNECTED'))
+  }
 
   return new Promise((resolve, reject) => {
     const timeoutMs = Number(process.env.CONTROL_ACK_TIMEOUT_MS || 5000)

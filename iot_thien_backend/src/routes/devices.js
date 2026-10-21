@@ -2,12 +2,19 @@ import { Router } from 'express'
 import crypto from 'node:crypto'
 import { pool } from '../db.js'
 import { requireAuth } from '../middleware/auth.js'
+import { asyncRoute } from '../utils/asyncRoute.js'
 import { publishCommand } from '../mqttClient.js'
 
 const router = Router()
-const VALID_ACTIONS = ['ON', 'OFF', 'AUTO']
 
-router.get('/devices', requireAuth, async (req, res) => {
+const FAILED_MESSAGES = {
+  ACK_TIMEOUT: 'Thiết bị không phản hồi',
+  REJECTED: 'Thiết bị từ chối lệnh'
+}
+// Mạch ESP8266 chỉ xử lý lệnh ON/OFF (lệnh khác sẽ bị mạch từ chối)
+const VALID_ACTIONS = ['ON', 'OFF']
+
+router.get('/devices', requireAuth, asyncRoute(async (req, res) => {
   const [devices] = await pool.query(
     'SELECT device_id, device_code, device_name, device_type, location, status, mode, last_seen FROM devices ORDER BY device_id'
   )
@@ -23,12 +30,12 @@ router.get('/devices', requireAuth, async (req, res) => {
       lastSeen: d.last_seen ? d.last_seen.toISOString() : null
     }))
   })
-})
+}))
 
-router.post('/devices/:deviceId/control', requireAuth, async (req, res) => {
+router.post('/devices/:deviceId/control', requireAuth, asyncRoute(async (req, res) => {
   const { action, mode } = req.body || {}
   if (!VALID_ACTIONS.includes(action)) {
-    return res.status(400).json({ message: 'action phải là ON, OFF hoặc AUTO' })
+    return res.status(400).json({ message: 'action phải là ON hoặc OFF' })
   }
 
   const [[device]] = await pool.query(
@@ -70,9 +77,9 @@ router.post('/devices/:deviceId/control', requireAuth, async (req, res) => {
       status: device.status,
       mode: device.mode,
       result: 'FAILED',
-      message: err.message === 'ACK_TIMEOUT' ? 'Thiết bị không phản hồi' : 'Không gửi được lệnh tới MQTT Broker'
+      message: FAILED_MESSAGES[err.message] || 'Không gửi được lệnh tới MQTT Broker'
     })
   }
-})
+}))
 
 export default router

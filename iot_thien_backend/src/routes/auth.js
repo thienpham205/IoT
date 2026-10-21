@@ -3,10 +3,11 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { pool } from '../db.js'
 import { requireAuth } from '../middleware/auth.js'
+import { asyncRoute } from '../utils/asyncRoute.js'
 
 const router = Router()
 
-router.post('/login', async (req, res) => {
+router.post('/login', asyncRoute(async (req, res) => {
   const { username, password } = req.body || {}
   if (!username || !password) {
     return res.status(400).json({ message: 'Thiếu username hoặc password' })
@@ -31,9 +32,9 @@ router.post('/login', async (req, res) => {
     expiresIn,
     user: { userId: user.user_id, fullName: user.full_name, role: user.role }
   })
-})
+}))
 
-router.get('/me', requireAuth, async (req, res) => {
+router.get('/me', requireAuth, asyncRoute(async (req, res) => {
   const [[user]] = await pool.query(
     `SELECT user_id, username, full_name, student_id, email, role,
             github_link, figma_link, postman_link, pdf_link
@@ -56,6 +57,6 @@ router.get('/me', requireAuth, async (req, res) => {
       pdfLink: user.pdf_link
     }
   })
-})
+}))
 
 export default router

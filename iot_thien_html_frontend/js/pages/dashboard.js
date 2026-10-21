@@ -150,12 +150,15 @@ document.getElementById('device-list').addEventListener('click', async (e) => {
   }
 })
 
-// Khởi chạy dữ liệu và chu kỳ làm mới tự động (realtime 5s)
+// Khởi chạy dữ liệu và chu kỳ làm mới tự động (realtime 5s).
+// Trạng thái đèn cũng được làm mới để thấy thay đổi từ nơi khác (Postman, tab khác);
+// bỏ qua khi đang chờ kết quả bấm ON/OFF để không ghi đè trạng thái đang hiển thị.
 async function initDashboard() {
   await Promise.all([loadLatestSensor(), loadChart(), loadDevices()])
   setInterval(() => {
     loadLatestSensor()
     loadChart()
+    if (!isControlling) loadDevices()
   }, 5000)
 }
 

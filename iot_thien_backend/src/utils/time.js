@@ -5,11 +5,11 @@ function vnTime(column) {
 }
 
 // Điều kiện tìm CHÍNH XÁC theo thời gian (giờ 24h, giờ Việt Nam), dùng chung cho
-// trang Cảm biến và Lịch sử hoạt động; cùng quy tắc với matchTimeQuery ở frontend:
-//   "17:30" / "17:30:15"         -> đúng giờ:phút[:giây]
-//   "17h"                         -> cả khung giờ 17
-//   "07/10/2026"                  -> cả ngày đó
-//   "07/10/2026 17:30[:15]"       -> đúng ngày + giờ
+// trang Cảm biến và Lịch sử hoạt động:
+//   "17:30" / "17:30:15"                    -> đúng giờ:phút[:giây]
+//   "17h"                                    -> cả khung giờ 17
+//   "2026-10-07" (hoặc "07/10/2026")         -> cả ngày đó
+//   "2026-10-07 17:30[:15]"                  -> đúng ngày + giờ
 // Dạng khác (VD "1", "abc") -> không khớp dòng nào.
 // Trả về { sql, params } để ghép vào mệnh đề WHERE.
 export function timeSearchCondition(column, search) {
@@ -20,10 +20,10 @@ export function timeSearchCondition(column, search) {
   })
   const join = (parts) => ({ sql: `(${parts.sql.join(' AND ')})`, params: parts.params })
 
-  // Hỗ trợ DD/MM/YYYY hoặc YYYY-MM-DD (hoặc dấu - hay /)
+  // Ngày dạng yyyy-MM-dd (định dạng hiển thị trên giao diện) hoặc dd/MM/yyyy
   const dateDMY = search.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/)
   const dateYMD = search.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/)
-  
+
   if (dateDMY || dateYMD) {
     let year, month, day, h, m, s
     if (dateDMY) {

@@ -50,24 +50,25 @@ function renderPagination(footer, data) {
 // Trả về { applyFilters, refresh }.
 function createPagedTable({ getPage, initialFilters, tbody, footer, columns, renderRow, emptyText }) {
   let params = { page: 0, size: 10, ...initialFilters }
-  let loading = false
+  // Số thứ tự lần tải gần nhất: kết quả của lần tải cũ (về muộn) bị bỏ qua,
+  // nên đổi bộ lọc / trang khi lần trước chưa xong vẫn hiện đúng dữ liệu mới nhất
+  let requestId = 0
 
   async function render() {
-    if (loading) return
-    loading = true
+    const current = ++requestId
     tbody.innerHTML = `<tr><td colspan="${columns}" class="table-empty">Đang tải dữ liệu từ máy chủ...</td></tr>`
     try {
       const data = await getPage(params)
+      if (current !== requestId) return
       const list = data?.content || []
       tbody.innerHTML = list.length
         ? list.map((row) => `<tr>${renderRow(row)}</tr>`).join('')
         : `<tr><td colspan="${columns}" class="table-empty">${emptyText}</td></tr>`
       renderPagination(footer, data || { page: 0, size: params.size, totalElements: 0, totalPages: 0 })
     } catch (err) {
+      if (current !== requestId) return
       console.error('[table] load error:', err)
       tbody.innerHTML = `<tr><td colspan="${columns}" class="table-empty" style="color: #ea3943;">Không thể tải dữ liệu: ${err.message || 'Lỗi kết nối máy chủ'}</td></tr>`
-    } finally {
-      loading = false
     }
   }
 

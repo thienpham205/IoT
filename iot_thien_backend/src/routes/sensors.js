@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { pool } from '../db.js'
 import { requireAuth } from '../middleware/auth.js'
+import { asyncRoute } from '../utils/asyncRoute.js'
 import { parsePagination, buildPageResponse, resolveSort } from '../utils/pagination.js'
 import { whereClause } from '../utils/sql.js'
 import { timeSearchCondition } from '../utils/time.js'
@@ -47,7 +48,7 @@ function toChartSeries(rows) {
   }
 }
 
-router.get('/sensors', requireAuth, async (req, res) => {
+router.get('/sensors', requireAuth, asyncRoute(async (req, res) => {
   const [sensors] = await pool.query(
     "SELECT sensor_id, sensor_code, sensor_name, sensor_type, unit, location, status FROM sensors WHERE status = 'ACTIVE' ORDER BY sensor_id"
   )
@@ -62,10 +63,10 @@ router.get('/sensors', requireAuth, async (req, res) => {
       status: s.status
     }))
   })
-})
+}))
 
 // Lần đo mới nhất (thẻ Nhiệt độ / Độ ẩm / Độ sáng trên Dashboard)
-router.get('/sensor-data/latest', requireAuth, async (req, res) => {
+router.get('/sensor-data/latest', requireAuth, asyncRoute(async (req, res) => {
   const { sensorCode } = req.query
   const [[row]] = await pool.query(
     `SELECT sd.data_id, s.sensor_code, s.sensor_name, sd.temperature, sd.humidity, sd.light, sd.status, sd.recorded_at
@@ -78,12 +79,12 @@ router.get('/sensor-data/latest', requireAuth, async (req, res) => {
 
   const dataAgeSeconds = Math.max(0, Math.round((Date.now() - new Date(row.recorded_at).getTime()) / 1000))
   res.json({ ...toMeasurementDto(row), stale: dataAgeSeconds > 30, dataAgeSeconds })
-})
+}))
 
 // Biểu đồ Dashboard.
 // - points > 0: chế độ thời gian thực, trả về N lần đo gần nhất (không gom nhóm)
 // - còn lại: gom trung bình theo interval (1m | 5m | 1h | 1d) trong khoảng from..to
-router.get('/sensor-data/chart', requireAuth, async (req, res) => {
+router.get('/sensor-data/chart', requireAuth, asyncRoute(async (req, res) => {
   const points = Number.parseInt(req.query.points, 10)
   if (points > 0) return res.json(await realtimeChart(points, req.query.sensorCode))
 
@@ -92,7 +93,7 @@ router.get('/sensor-data/chart', requireAuth, async (req, res) => {
     return res.status(400).json({ message: 'from phải nhỏ hơn to' })
   }
   res.json(await bucketChart(req.query))
-})
+}))
 
 async function realtimeChart(points, sensorCode) {
   const limit = Math.min(points, MAX_REALTIME_POINTS)
@@ -148,12 +149,17 @@ async function bucketChart({ sensorCode, from, to, interval: requested }) {
     params
   )
 
-  const labelFormat = { hour: '2-digit', minute: '2-digit', ...(interval === '1d' ? { day: '2-digit', month: '2-digit' } : {}) }
+  const labelFormat = {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Asia/Ho_Chi_Minh',
+    ...(interval === '1d' ? { day: '2-digit', month: '2-digit' } : {})
+  }
   return {
     labels: rows.map((r) => new Date(r.bucket * 1000).toLocaleString('vi-VN', labelFormat)),
     series: toChartSeries(rows),
     interval,
-    timezone: 'Asia/Bangkok'
+    timezone: 'Asia/Ho_Chi_Minh'
   }
 }
 
@@ -189,7 +195,7 @@ function searchCondition(search, searchField) {
 // Danh sách giá trị đo, mỗi dòng = 1 loại cảm biến của 1 lần đo.
 // Query: type (temperature|humidity|light, rỗng = tất cả), searchField (all|id|value|time),
 //        search, from, to, sort (recordedAt|value|dataId,asc|desc), page, size
-router.get('/sensor-data', requireAuth, async (req, res) => {
+router.get('/sensor-data', requireAuth, asyncRoute(async (req, res) => {
   const { page, size, offset } = parsePagination(req.query)
   const { field, dir } = resolveSort(req.query.sort, SORT_WHITELIST, 'recordedAt,desc')
   const { type, searchField = 'all', from, to } = req.query
@@ -238,9 +244,9 @@ router.get('/sensor-data', requireAuth, async (req, res) => {
     recordedAt: r.recorded_at.toISOString()
   }))
   res.json(buildPageResponse({ content, page, size, totalElements: total }))
-})
+}))
 
-router.get('/sensor-data/:dataId', requireAuth, async (req, res) => {
+router.get('/sensor-data/:dataId', requireAuth, asyncRoute(async (req, res) => {
   const [[row]] = await pool.query(
     `SELECT sd.data_id, s.sensor_name, s.sensor_code, sd.temperature, sd.humidity, sd.light, sd.status, sd.recorded_at
      ${SENSOR_DATA_FROM}
@@ -249,6 +255,6 @@ router.get('/sensor-data/:dataId', requireAuth, async (req, res) => {
   )
   if (!row) return res.status(404).json({ message: 'Không tìm thấy bản ghi' })
   res.json({ dataId: row.data_id, ...toMeasurementDto(row) })
-})
+}))
 
 export default router
