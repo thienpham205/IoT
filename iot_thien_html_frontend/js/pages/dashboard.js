@@ -77,11 +77,16 @@ async function loadChart() {
 // ---------- Điều khiển đèn (Chỉ 1 đèn duy nhất - LIGHT_01) ----------
 let currentDevices = []
 let isControlling = false
+let devicesRequest = 0
 
-async function loadDevices() {
+// fromTimer = true: lượt làm mới định kỳ 5 giây
+async function loadDevices(fromTimer = false) {
+  const request = ++devicesRequest
   try {
     const devices = await getDevices()
-    // Chỉ lấy 1 đèn (Đèn 1) khớp với phần cứng thật ESP8266 và báo cáo
+    // Bỏ kết quả cũ (đã có lần tải mới hơn) và lượt làm mới định kỳ về đúng lúc đang bấm ON/OFF
+    if (request !== devicesRequest || (fromTimer && isControlling)) return
+    // Chỉ lấy 1 đèn khớp với phần cứng thật ESP8266 và báo cáo
     currentDevices = devices.slice(0, 1)
     renderDevices()
   } catch (err) {
@@ -158,7 +163,7 @@ async function initDashboard() {
   setInterval(() => {
     loadLatestSensor()
     loadChart()
-    if (!isControlling) loadDevices()
+    if (!isControlling) loadDevices(true)
   }, 5000)
 }
 
