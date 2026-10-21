@@ -27,10 +27,16 @@ async function apiFetch(endpoint, options = {}) {
     headers.Authorization = `Bearer ${token}`
   }
 
-  const response = await fetch(url, {
-    ...options,
-    headers
-  })
+  let response
+  try {
+    response = await fetch(url, {
+      ...options,
+      headers
+    })
+  } catch {
+    // Backend chưa chạy / mất mạng: fetch báo "Failed to fetch", đổi sang thông báo tiếng Việt
+    throw new Error('Không kết nối được máy chủ')
+  }
 
   const data = await response.json().catch(() => ({}))
 

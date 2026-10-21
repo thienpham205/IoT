@@ -68,7 +68,7 @@ function createPagedTable({ getPage, initialFilters, tbody, footer, columns, ren
     } catch (err) {
       if (current !== requestId) return
       console.error('[table] load error:', err)
-      tbody.innerHTML = `<tr><td colspan="${columns}" class="table-empty" style="color: #ea3943;">Không thể tải dữ liệu: ${err.message || 'Lỗi kết nối máy chủ'}</td></tr>`
+      tbody.innerHTML = `<tr><td colspan="${columns}" class="table-empty" style="color: #ea3943;">Không thể tải dữ liệu: ${escapeHtml(err.message || 'Lỗi kết nối máy chủ')}</td></tr>`
     }
   }
 

@@ -1,7 +1,3 @@
--- Schema theo Chương 2.6 (Thiết kế cơ sở dữ liệu) của báo cáo IOT_Thien.
--- github_link được bổ sung ngoài bảng users trong docx vì giao diện Profile
--- (theo yêu cầu thiết kế của giảng viên) cần hiển thị thêm liên kết GitHub.
-
 SET NAMES utf8mb4;
 SET time_zone = '+00:00';
 

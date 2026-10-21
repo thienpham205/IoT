@@ -57,17 +57,11 @@ router.post('/devices/:deviceId/control', requireAuth, asyncRoute(async (req, re
     [actionCode, device.device_id, req.user.userId, action, action, device.location, now]
   )
 
+  // Chỉ bọc bước gửi lệnh / chờ ACK: lỗi khác (VD lỗi CSDL) đi tới middleware lỗi chung,
+  // không bị báo nhầm là lỗi MQTT Broker
+  let ack
   try {
-    const ack = await publishCommand({ actionCode, deviceCode: device.device_code, action, mode: requestedMode })
-    await pool.query('UPDATE devices SET mode = ? WHERE device_id = ?', [requestedMode, device.device_id])
-    return res.json({
-      actionCode,
-      deviceId: device.device_id,
-      status: ack.status,
-      mode: requestedMode,
-      result: 'SUCCESS',
-      confirmedAt: ack.confirmedAt
-    })
+    ack = await publishCommand({ actionCode, deviceCode: device.device_code, action, mode: requestedMode })
   } catch (err) {
     // Lỗi publish (mất kết nối Broker) thì timeout chưa kịp ghi FAILED, nên ghi ở đây
     await pool.query("UPDATE action_history SET result = 'FAILED' WHERE action_code = ?", [actionCode])
@@ -80,6 +74,16 @@ router.post('/devices/:deviceId/control', requireAuth, asyncRoute(async (req, re
       message: FAILED_MESSAGES[err.message] || 'Không gửi được lệnh tới MQTT Broker'
     })
   }
+
+  await pool.query('UPDATE devices SET mode = ? WHERE device_id = ?', [requestedMode, device.device_id])
+  res.json({
+    actionCode,
+    deviceId: device.device_id,
+    status: ack.status,
+    mode: requestedMode,
+    result: 'SUCCESS',
+    confirmedAt: ack.confirmedAt
+  })
 }))
 
 export default router

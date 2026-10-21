@@ -30,13 +30,9 @@ async function main() {
      ON DUPLICATE KEY UPDATE sensor_name = VALUES(sensor_name)`
   )
 
-  // LIGHT_01 khớp đúng device_code mà firmware ESP8266 (esp8266-01) hiện đang publish/subscribe
-  // qua MQTT (LED thật trên chân D0). LIGHT_02 là đèn thứ hai trên giao diện, firmware hiện
-  // chưa có chân/relay cho nó nên điều khiển sẽ không nhận được ACK từ mạch.
-  const devices = [
-    ['LIGHT_01', 'Đèn', 'LIGHT', 'Phòng khách'],
-    ['LIGHT_02', 'Đèn 2', 'LIGHT', 'Phòng ngủ']
-  ]
+  // LIGHT_01 khớp đúng device_code mà firmware ESP8266 (esp8266-01) đang publish/subscribe
+  // qua MQTT (LED thật trên chân D0). Mạch chỉ có 1 đèn nên chỉ tạo 1 thiết bị.
+  const devices = [['LIGHT_01', 'Đèn', 'LIGHT', '']]
   for (const [code, name, type, location] of devices) {
     await pool.query(
       `INSERT INTO devices (device_code, device_name, device_type, location, status, mode)
