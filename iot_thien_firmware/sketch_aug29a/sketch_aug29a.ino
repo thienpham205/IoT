@@ -155,11 +155,38 @@ void startWiFi() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   lastWiFiAttempt = millis();
+  Serial.println();
+  Serial.print("[WiFi] Dang ket noi toi: ");
+  Serial.println(WIFI_SSID);
+}
+
+// Ten trang thai WiFi de in ra Serial
+const char* wifiStatusText(wl_status_t status) {
+  switch (status) {
+    case WL_NO_SSID_AVAIL: return "khong tim thay WiFi (sai ten hoac khong phai 2.4GHz)";
+    case WL_CONNECT_FAILED: return "ket noi that bai";
+    case WL_WRONG_PASSWORD: return "sai mat khau WiFi";
+    case WL_DISCONNECTED: return "dang ket noi / mat ket noi";
+    case WL_IDLE_STATUS: return "dang cho";
+    default: return "khac";
+  }
 }
 
 // Theo doi va tu ket noi lai WiFi, khong dung delay() chan chuong trinh
 void maintainWiFi() {
+  static wl_status_t lastStatus = WL_IDLE_STATUS;
   wl_status_t status = WiFi.status();
+  // In ra moi khi trang thai WiFi thay doi (de chan doan qua Serial Monitor)
+  if (status != lastStatus) {
+    lastStatus = status;
+    if (status == WL_CONNECTED) {
+      Serial.print("[WiFi] Da ket noi, IP: ");
+      Serial.println(WiFi.localIP());
+    } else {
+      Serial.print("[WiFi] Trang thai: ");
+      Serial.println(wifiStatusText(status));
+    }
+  }
   if (status != WL_CONNECTED && millis() - lastWiFiAttempt >= WIFI_RETRY_MS) {
     lastWiFiAttempt = millis();
     WiFi.reconnect();
@@ -173,11 +200,21 @@ void maintainMQTT() {
   lastMQTTAttempt = millis();
 
   String clientId = "ESP8266-" + String(ESP.getChipId(), HEX);
+  Serial.print("[MQTT] Ket noi toi ");
+  Serial.print(MQTT_HOST);
+  Serial.print(":");
+  Serial.print(MQTT_PORT);
+  Serial.print(" ... ");
   if (mqttClient.connect(clientId.c_str(), MQTT_USER, MQTT_PASSWORD)) {
+    Serial.println("thanh cong");
     mqttClient.subscribe(TOPIC_DEVICE_COMMAND.c_str(), 1);
     // Bao ngay trang thai that (vd: OFF sau khi vua boot) de Backend/Dashboard
     // khong con hien thi trang thai cu tu truoc khi mat nguon/reset.
     publishStatus("", true);
+  } else {
+    // state(): -2 khong toi duoc may chu (sai IP / bi chan), 4 sai tai khoan MQTT, 5 khong duoc phep
+    Serial.print("that bai, state = ");
+    Serial.println(mqttClient.state());
   }
 }
 

@@ -5,12 +5,24 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:3000/api" },
-    { "key": "token", "value": "" }
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
   ],
   "auth": {
     "type": "bearer",
-    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
   },
   "item": [
     {
@@ -31,18 +43,46 @@
             }
           ],
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"username\": \"phamminhthien\",\n  \"password\": \"123456\"\n}" },
-            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"phamminhthien\",\n  \"password\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
           }
         },
         {
           "name": "Thông tin tài khoản",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
           }
         }
       ]
@@ -54,7 +94,15 @@
           "name": "Danh sách cảm biến",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/sensors", "host": ["{{baseUrl}}"], "path": ["sensors"] }
+            "url": {
+              "raw": "{{baseUrl}}/sensors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sensors"
+              ]
+            }
           }
         },
         {
@@ -63,8 +111,19 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/sensor-data/latest?sensorCode=SENSOR_01",
-              "host": ["{{baseUrl}}"], "path": ["sensor-data", "latest"],
-              "query": [{ "key": "sensorCode", "value": "SENSOR_01" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sensor-data",
+                "latest"
+              ],
+              "query": [
+                {
+                  "key": "sensorCode",
+                  "value": "SENSOR_01"
+                }
+              ]
             }
           }
         },
@@ -74,8 +133,23 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/sensor-data/chart?sensorCode=SENSOR_01&points=20",
-              "host": ["{{baseUrl}}"], "path": ["sensor-data", "chart"],
-              "query": [{ "key": "sensorCode", "value": "SENSOR_01" }, { "key": "points", "value": "20" }]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sensor-data",
+                "chart"
+              ],
+              "query": [
+                {
+                  "key": "sensorCode",
+                  "value": "SENSOR_01"
+                },
+                {
+                  "key": "points",
+                  "value": "20"
+                }
+              ]
             }
           }
         },
@@ -85,12 +159,33 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/sensor-data/chart?sensorCode=SENSOR_01&interval=1h",
-              "host": ["{{baseUrl}}"], "path": ["sensor-data", "chart"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sensor-data",
+                "chart"
+              ],
               "query": [
-                { "key": "sensorCode", "value": "SENSOR_01" },
-                { "key": "interval", "value": "1h", "description": "1m | 5m | 1h | 1d" },
-                { "key": "from", "value": "", "disabled": true },
-                { "key": "to", "value": "", "disabled": true }
+                {
+                  "key": "sensorCode",
+                  "value": "SENSOR_01"
+                },
+                {
+                  "key": "interval",
+                  "value": "1h",
+                  "description": "1m | 5m | 1h | 1d"
+                },
+                {
+                  "key": "from",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "",
+                  "disabled": true
+                }
               ]
             }
           }
@@ -101,16 +196,51 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/sensor-data?page=0&size=10&type=&searchField=all&search=&sort=recordedAt,desc",
-              "host": ["{{baseUrl}}"], "path": ["sensor-data"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sensor-data"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" },
-                { "key": "type", "value": "", "description": "rỗng = tất cả | temperature | humidity | light" },
-                { "key": "searchField", "value": "all", "description": "all | id | value | time" },
-                { "key": "search", "value": "", "description": "VD time: 05/10/2026 15:30" },
-                { "key": "sort", "value": "recordedAt,desc", "description": "recordedAt | value | dataId, asc | desc" },
-                { "key": "from", "value": "", "disabled": true },
-                { "key": "to", "value": "", "disabled": true }
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "type",
+                  "value": "",
+                  "description": "rỗng = tất cả | temperature | humidity | light"
+                },
+                {
+                  "key": "searchField",
+                  "value": "all",
+                  "description": "all | id | value | time"
+                },
+                {
+                  "key": "search",
+                  "value": "",
+                  "description": "VD time: 05/10/2026 15:30"
+                },
+                {
+                  "key": "sort",
+                  "value": "recordedAt,desc",
+                  "description": "recordedAt | value | dataId, asc | desc"
+                },
+                {
+                  "key": "from",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "",
+                  "disabled": true
+                }
               ]
             }
           }
@@ -119,7 +249,65 @@
           "name": "Chi tiết 1 lần đo",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/sensor-data/1", "host": ["{{baseUrl}}"], "path": ["sensor-data", "1"] }
+            "url": {
+              "raw": "{{baseUrl}}/sensor-data/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sensor-data",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Phân trang dữ liệu cảm biến",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Trả về 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Có đủ thông tin phân trang', () => {",
+                  "  pm.expect(body).to.have.keys('content', 'page', 'size', 'totalElements', 'totalPages');",
+                  "});",
+                  "pm.test('Đúng trang và số dòng đã yêu cầu', () => {",
+                  "  pm.expect(body.page).to.eql(Number(pm.request.url.query.get('page')));",
+                  "  pm.expect(body.size).to.eql(Number(pm.request.url.query.get('size')));",
+                  "  pm.expect(body.content.length).to.be.at.most(body.size);",
+                  "});",
+                  "console.log(`Trang ${body.page + 1}/${body.totalPages} - ${body.content.length} dòng / tổng ${body.totalElements} bản ghi`);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "description": "Minh họa phân trang. page bắt đầu từ 0 (page=1 là trang thứ 2), size là số bản ghi mỗi trang (1–100, giao diện dùng 5/10/20). Kết quả trả về content (các dòng của trang) cùng page, size, totalElements (tổng số bản ghi) và totalPages (tổng số trang). Có thể kết hợp với type, search, sort như request Lịch sử giá trị cảm biến.",
+            "url": {
+              "raw": "{{baseUrl}}/sensor-data?page=1&size=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "sensor-data"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Số trang, bắt đầu từ 0"
+                },
+                {
+                  "key": "size",
+                  "value": "5",
+                  "description": "Số bản ghi mỗi trang (1–100)"
+                }
+              ]
+            }
           }
         }
       ]
@@ -131,25 +319,69 @@
           "name": "Danh sách thiết bị",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/devices", "host": ["{{baseUrl}}"], "path": ["devices"] }
+            "url": {
+              "raw": "{{baseUrl}}/devices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "devices"
+              ]
+            }
           }
         },
         {
           "name": "Bật đèn",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"action\": \"ON\",\n  \"mode\": \"MANUAL\"\n}" },
-            "url": { "raw": "{{baseUrl}}/devices/1/control", "host": ["{{baseUrl}}"], "path": ["devices", "1", "control"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"ON\",\n  \"mode\": \"MANUAL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/devices/1/control",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "devices",
+                "1",
+                "control"
+              ]
+            }
           }
         },
         {
           "name": "Tắt đèn",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"action\": \"OFF\",\n  \"mode\": \"MANUAL\"\n}" },
-            "url": { "raw": "{{baseUrl}}/devices/1/control", "host": ["{{baseUrl}}"], "path": ["devices", "1", "control"] }
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"action\": \"OFF\",\n  \"mode\": \"MANUAL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/devices/1/control",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "devices",
+                "1",
+                "control"
+              ]
+            }
           }
         }
       ]
@@ -163,17 +395,57 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/action-history?page=0&size=10&searchField=all&search=",
-              "host": ["{{baseUrl}}"], "path": ["action-history"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "action-history"
+              ],
               "query": [
-                { "key": "page", "value": "0" },
-                { "key": "size", "value": "10" },
-                { "key": "searchField", "value": "all", "description": "all | id | device | time" },
-                { "key": "search", "value": "" },
-                { "key": "deviceId", "value": "", "disabled": true },
-                { "key": "action", "value": "", "description": "ON | OFF", "disabled": true },
-                { "key": "result", "value": "", "description": "SUCCESS | FAILED | PENDING", "disabled": true },
-                { "key": "from", "value": "", "disabled": true },
-                { "key": "to", "value": "", "disabled": true }
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "searchField",
+                  "value": "all",
+                  "description": "all | id | device | time"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "deviceId",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "action",
+                  "value": "",
+                  "description": "ON | OFF",
+                  "disabled": true
+                },
+                {
+                  "key": "result",
+                  "value": "",
+                  "description": "SUCCESS | FAILED | PENDING",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "",
+                  "disabled": true
+                }
               ]
             }
           }
@@ -182,7 +454,65 @@
           "name": "Chi tiết 1 lần điều khiển",
           "request": {
             "method": "GET",
-            "url": { "raw": "{{baseUrl}}/action-history/1", "host": ["{{baseUrl}}"], "path": ["action-history", "1"] }
+            "url": {
+              "raw": "{{baseUrl}}/action-history/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "action-history",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Phân trang lịch sử điều khiển",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const body = pm.response.json();",
+                  "pm.test('Trả về 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Có đủ thông tin phân trang', () => {",
+                  "  pm.expect(body).to.have.keys('content', 'page', 'size', 'totalElements', 'totalPages');",
+                  "});",
+                  "pm.test('Đúng trang và số dòng đã yêu cầu', () => {",
+                  "  pm.expect(body.page).to.eql(Number(pm.request.url.query.get('page')));",
+                  "  pm.expect(body.size).to.eql(Number(pm.request.url.query.get('size')));",
+                  "  pm.expect(body.content.length).to.be.at.most(body.size);",
+                  "});",
+                  "console.log(`Trang ${body.page + 1}/${body.totalPages} - ${body.content.length} dòng / tổng ${body.totalElements} bản ghi`);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "description": "Minh họa phân trang. page bắt đầu từ 0 (page=1 là trang thứ 2), size là số bản ghi mỗi trang (1–100, giao diện dùng 5/10/20). Kết quả trả về content (các dòng của trang) cùng page, size, totalElements (tổng số bản ghi) và totalPages (tổng số trang). Có thể kết hợp với deviceId, action, result, search.",
+            "url": {
+              "raw": "{{baseUrl}}/action-history?page=1&size=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "action-history"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Số trang, bắt đầu từ 0"
+                },
+                {
+                  "key": "size",
+                  "value": "5",
+                  "description": "Số bản ghi mỗi trang (1–100)"
+                }
+              ]
+            }
           }
         }
       ]
